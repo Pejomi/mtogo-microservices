@@ -19,6 +19,7 @@
     <modules>
         <module>order-service</module>
         <module>consumer-service</module>
+        <module>base-domain</module>
     </modules>
 
     <properties>
