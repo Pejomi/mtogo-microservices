@@ -18,6 +18,7 @@
     <description>mtogo-microservices</description>
     <modules>
         <module>consumer-service</module>
+        <module>auth-service</module>
     </modules>
 
     <properties>
