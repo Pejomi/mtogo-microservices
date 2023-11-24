@@ -1,21 +1,16 @@
 package dk.pejomi.basedomain.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDto {
+public class OrderItemDto {
     private Long id;
-    private String consumerId;
-    private String restaurantId;
-    private String orderState;
+    private String menuItemId;
     private double price;
-    private List<OrderItemDto> orderItems;
-}
+    private int quantity;
 
+}

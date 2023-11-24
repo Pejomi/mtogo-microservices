@@ -1,5 +1,6 @@
 package dk.pejomi.orderservice.model;
 
+import dk.pejomi.basedomain.dto.OrderItemDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,9 +18,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String consumerId;
+    private String restaurantId;
     private String orderState;
     private double price;
 
-//    @OneToMany(cascade = CascadeType.ALL)
-//    private List<OrderItem> orderItems;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems;
 }

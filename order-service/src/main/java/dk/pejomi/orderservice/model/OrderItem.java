@@ -16,9 +16,6 @@ public class OrderItem {
     private Long id;
     private String menuItemId;
     private double price;
-    private int qty;
+    private int quantity;
 
-//    @ManyToOne
-//    @JoinColumn(name = "order_id")
-//    private Order order;
 }
