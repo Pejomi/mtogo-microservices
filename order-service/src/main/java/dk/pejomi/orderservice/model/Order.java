@@ -1,6 +1,5 @@
 package dk.pejomi.orderservice.model;
 
-import dk.pejomi.basedomain.dto.OrderItemDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
