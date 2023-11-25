@@ -3,12 +3,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
 
     <groupId>dk.pejomi</groupId>
     <artifactId>mtogo-microservices</artifactId>
@@ -16,7 +10,10 @@
     <packaging>pom</packaging>
     <name>mtogo-microservices</name>
     <description>mtogo-microservices</description>
+
     <modules>
+        <module>base-domain</module>
+        <module>order-service</module>
         <module>consumer-service</module>
     </modules>
 
@@ -36,8 +33,21 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>3.1.5</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>dk.pejomi</groupId>
+                <artifactId>base-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -50,6 +60,7 @@
             <version>1.6.0.Beta1</version>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
