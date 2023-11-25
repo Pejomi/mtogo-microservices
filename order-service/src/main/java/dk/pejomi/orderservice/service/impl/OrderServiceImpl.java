@@ -11,10 +11,9 @@ import dk.pejomi.orderservice.repository.OrderRepository;
 import dk.pejomi.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,11 +24,11 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
 
     @Override
+    @Transactional
     public OrderDto createOrder(OrderDto orderDto) {
         Order order = orderRepository.save(
 //                OrderMapper.INSTANCE.toOrder(orderDto));
                 mapOrderDtoToOrder(orderDto));
-
 
         // Kafka event
         OrderEvent orderEvent = new OrderEvent();
@@ -43,6 +42,7 @@ public class OrderServiceImpl implements OrderService {
 
     private Order mapOrderDtoToOrder(OrderDto orderDto) {
         Order order = new Order();
+        order.setId(orderDto.getId());
         order.setConsumerId(orderDto.getConsumerId());
         order.setRestaurantId(orderDto.getRestaurantId());
         order.setOrderState(orderDto.getOrderState());
@@ -52,17 +52,23 @@ public class OrderServiceImpl implements OrderService {
             List<OrderItem> orderItems = orderDto.getOrderItems().stream()
                     .map(this::mapOrderItemDtoToOrderItem)
                     .toList();
+
+            orderItems.forEach(orderItem -> orderItem.setOrder(order));
+
             order.setOrderItems(orderItems);
         }
+
 
         return order;
     }
 
     private OrderItem mapOrderItemDtoToOrderItem(OrderItemDto orderItemDto) {
         OrderItem orderItem = new OrderItem();
+        orderItem.setId(orderItemDto.getId());
         orderItem.setMenuItemId(orderItemDto.getMenuItemId());
         orderItem.setPrice(orderItemDto.getPrice());
         orderItem.setQuantity(orderItemDto.getQuantity());
+
         return orderItem;
     }
 }

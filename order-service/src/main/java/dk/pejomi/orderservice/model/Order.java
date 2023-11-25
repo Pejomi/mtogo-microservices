@@ -1,9 +1,7 @@
 package dk.pejomi.orderservice.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,16 +9,22 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String consumerId;
-    private String restaurantId;
+    @Column(nullable = false)
+    private Long consumerId;
+    @Column(nullable = false)
+    private Long restaurantId;
+    @Column(nullable = false)
     private String orderState;
+    @Column(nullable = false, scale = 2, length = 100000)
     private double price;
-
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
+    
+
 }

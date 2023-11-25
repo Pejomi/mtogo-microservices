@@ -1,16 +1,18 @@
 package dk.pejomi.basedomain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class OrderItemDto {
     private Long id;
-    private String menuItemId;
+    private Long menuItemId;
     private double price;
     private int quantity;
+    @ToString.Exclude
+    private OrderDto order;
+
 
 }

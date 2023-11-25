@@ -24,7 +24,7 @@ public class OrderProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendMessage(OrderEvent event){
+    public OrderEvent sendMessage(OrderEvent event){
         LOGGER.info(String.format("Order event => %s", event.toString()));
 
         // create Message
@@ -33,5 +33,7 @@ public class OrderProducer {
                 .setHeader(KafkaHeaders.TOPIC, topic.name())
                 .build();
         kafkaTemplate.send(message);
+
+        return event;
     }
 }
