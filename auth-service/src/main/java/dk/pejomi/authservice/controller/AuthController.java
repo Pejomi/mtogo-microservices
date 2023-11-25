@@ -1,59 +1,62 @@
 package dk.pejomi.authservice.controller;
 
-import dk.pejomi.authservice.model.*;
-import dk.pejomi.authservice.repository.RoleRepository;
-import dk.pejomi.authservice.repository.UserRepository;
-import dk.pejomi.authservice.util.JwtGenerator;
+import dk.pejomi.authservice.model.AuthResponseDto;
+import dk.pejomi.authservice.model.LoginDto;
+import dk.pejomi.authservice.model.RegisterDto;
+import dk.pejomi.authservice.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Collections;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtGenerator jwtGenerator;
+    private final UserService userService;
+
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginDto.getUsername(),
-                        loginDto.getPassword())
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtGenerator.generateToken(authentication);
-        return ResponseEntity.ok(new AuthResponseDto(token));
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
-        if (userRepository.existsByUsername(registerDto.getUsername())) {
-            return ResponseEntity.badRequest().body("Username is already taken");
+        try {
+            AuthResponseDto authResponse = userService.login(loginDto);
+            return ResponseEntity.ok(authResponse);
+        } catch (AuthenticationException e) {
+            // Handle authentication failure here
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (Exception e) {
+            // Handle other exceptions if needed
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        User user = new User();
-        user.setUsername(registerDto.getUsername());
-        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-
-        Role userRole = roleRepository.findByName("USER").orElseThrow(() -> new RuntimeException("User role not found"));
-        user.setRoles(Collections.singletonList(userRole));
-
-        userRepository.save(user);
-
-        return ResponseEntity.ok("User registered successfully");
     }
 
+    @PostMapping("/register/consumer")
+    public ResponseEntity<String> registerConsumer(@RequestBody RegisterDto registerDto) {
+        if (userService.checkUsername(registerDto.getUsername())) {
+            return new ResponseEntity<>("Username already exists", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            return new ResponseEntity<>(userService.registerConsumer(registerDto), HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/register/restaurant")
+    public ResponseEntity<String> registerRestaurant(@RequestBody RegisterDto registerDto) {
+        if (userService.checkUsername(registerDto.getUsername())) {
+            return new ResponseEntity<>("Username already exists", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            return new ResponseEntity<>(userService.registerRestaurant(registerDto), HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
