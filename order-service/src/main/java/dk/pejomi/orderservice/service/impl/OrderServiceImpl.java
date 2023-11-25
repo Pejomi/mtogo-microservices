@@ -37,7 +37,8 @@ public class OrderServiceImpl implements OrderService {
         orderEvent.setOrderDto(orderDto);
         orderProducer.sendMessage(orderEvent);
 
-        return OrderMapper.INSTANCE.toOrderDTO(order);
+        //return OrderMapper.INSTANCE.toOrderDTO(order);
+        return mapOrderToOrderDto(order);
     }
 
     private Order mapOrderDtoToOrder(OrderDto orderDto) {
@@ -70,5 +71,34 @@ public class OrderServiceImpl implements OrderService {
         orderItem.setQuantity(orderItemDto.getQuantity());
 
         return orderItem;
+    }
+
+    private OrderDto mapOrderToOrderDto(Order order) {
+        OrderDto orderDto = new OrderDto();
+        orderDto.setId(order.getId());
+        orderDto.setConsumerId(order.getConsumerId());
+        orderDto.setRestaurantId(order.getRestaurantId());
+        orderDto.setOrderState(order.getOrderState());
+        orderDto.setPrice(order.getPrice());
+
+        if (order.getOrderItems() != null) {
+            List<OrderItemDto> orderItemDtos = order.getOrderItems().stream()
+                    .map(this::mapOrderItemToOrderItemDto)
+                    .toList();
+
+            orderDto.setOrderItems(orderItemDtos);
+        }
+
+        return orderDto;
+    }
+
+    private OrderItemDto mapOrderItemToOrderItemDto(OrderItem orderItem) {
+        OrderItemDto orderItemDto = new OrderItemDto();
+        orderItemDto.setId(orderItem.getId());
+        orderItemDto.setMenuItemId(orderItem.getMenuItemId());
+        orderItemDto.setPrice(orderItem.getPrice());
+        orderItemDto.setQuantity(orderItem.getQuantity());
+
+        return orderItemDto;
     }
 }
