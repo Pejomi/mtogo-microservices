@@ -3,6 +3,7 @@ package dk.pejomi.orderservice.controller;
 import dk.pejomi.basedomain.dto.OrderDto;
 import dk.pejomi.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,9 +18,9 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<String> placeOrder(@RequestBody OrderDto orderDto) {
-        orderService.createOrder(orderDto);
-        return ResponseEntity.ok("Order placed successfully ...");
+    public ResponseEntity<OrderDto> placeOrder(@RequestBody OrderDto orderDto) {
+
+        return new ResponseEntity<>(orderService.createOrder(orderDto), HttpStatus.CREATED);
     }
 }
 
