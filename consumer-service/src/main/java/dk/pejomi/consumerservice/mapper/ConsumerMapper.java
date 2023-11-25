@@ -1,6 +1,6 @@
 package dk.pejomi.consumerservice.mapper;
 
-import dk.pejomi.consumerservice.dto.ConsumerDTO;
+import dk.pejomi.basedomain.dto.ConsumerDTO;
 import dk.pejomi.consumerservice.model.Consumer;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

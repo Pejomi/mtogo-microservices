@@ -63,6 +63,19 @@
             <artifactId>tomcat-servlet-api</artifactId>
             <version>9.0.65</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>dk.pejomi</groupId>
+            <artifactId>base-domain</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

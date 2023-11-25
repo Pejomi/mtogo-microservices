@@ -1,6 +1,6 @@
 package dk.pejomi.consumerservice.service;
 
-import dk.pejomi.consumerservice.dto.ConsumerDTO;
+import dk.pejomi.basedomain.dto.ConsumerDTO;
 
 public interface ConsumerService {
     ConsumerDTO createConsumer(ConsumerDTO consumerDTO);

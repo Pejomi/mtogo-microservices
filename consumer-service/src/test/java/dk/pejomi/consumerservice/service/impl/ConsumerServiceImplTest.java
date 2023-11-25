@@ -1,6 +1,6 @@
 package dk.pejomi.consumerservice.service.impl;
 
-import dk.pejomi.consumerservice.dto.ConsumerDTO;
+import dk.pejomi.basedomain.dto.ConsumerDTO;
 import dk.pejomi.consumerservice.model.Consumer;
 import dk.pejomi.consumerservice.repository.ConsumerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 

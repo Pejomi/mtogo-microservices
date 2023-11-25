@@ -1,6 +1,6 @@
 package dk.pejomi.consumerservice.controller;
 
-import dk.pejomi.consumerservice.dto.ConsumerDTO;
+import dk.pejomi.basedomain.dto.ConsumerDTO;
 import dk.pejomi.consumerservice.service.ConsumerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

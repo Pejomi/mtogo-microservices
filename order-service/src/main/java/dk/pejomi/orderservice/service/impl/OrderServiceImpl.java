@@ -1,10 +1,9 @@
 package dk.pejomi.orderservice.service.impl;
 
 import dk.pejomi.basedomain.dto.OrderDto;
-import dk.pejomi.basedomain.dto.OrderEvent;
+import dk.pejomi.basedomain.event.OrderEvent;
 import dk.pejomi.basedomain.dto.OrderItemDto;
 import dk.pejomi.orderservice.kafka.OrderProducer;
-import dk.pejomi.orderservice.mapper.OrderMapper;
 import dk.pejomi.orderservice.model.Order;
 import dk.pejomi.orderservice.model.OrderItem;
 import dk.pejomi.orderservice.repository.OrderRepository;

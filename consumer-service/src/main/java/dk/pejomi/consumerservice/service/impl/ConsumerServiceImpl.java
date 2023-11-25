@@ -1,6 +1,6 @@
 package dk.pejomi.consumerservice.service.impl;
 
-import dk.pejomi.consumerservice.dto.ConsumerDTO;
+import dk.pejomi.basedomain.dto.ConsumerDTO;
 import dk.pejomi.consumerservice.mapper.ConsumerMapper;
 import dk.pejomi.consumerservice.model.Consumer;
 import dk.pejomi.consumerservice.repository.ConsumerRepository;

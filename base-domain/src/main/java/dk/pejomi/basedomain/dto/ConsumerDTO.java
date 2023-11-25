@@ -1,4 +1,4 @@
-package dk.pejomi.consumerservice.dto;
+package dk.pejomi.basedomain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

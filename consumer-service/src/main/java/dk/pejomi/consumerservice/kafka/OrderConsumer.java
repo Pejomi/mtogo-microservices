@@ -1,7 +1,7 @@
 package dk.pejomi.consumerservice.kafka;
 
 
-import dk.pejomi.basedomain.dto.OrderEvent;
+import dk.pejomi.basedomain.event.OrderEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
