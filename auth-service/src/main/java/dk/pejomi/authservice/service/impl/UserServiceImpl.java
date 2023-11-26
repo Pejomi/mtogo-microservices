@@ -53,6 +53,7 @@ public class UserServiceImpl implements UserService {
         try {
             User user = new User();
             user.setUsername(registerDto.getUsername());
+            user.setEmail(registerDto.getEmail());
             user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
             Role userRole = roleRepository.findByName("CONSUMER").orElseThrow(() -> new RuntimeException("User role not found"));
@@ -63,7 +64,6 @@ public class UserServiceImpl implements UserService {
             // Prepare consumerDTO
             ConsumerDto consumerDTO = ConsumerDto.builder()
                     .id(newUser.getId())
-                    .email(registerDto.getEmail())
                     .phone(registerDto.getPhone())
                     .street(registerDto.getStreet())
                     .city(registerDto.getCity())

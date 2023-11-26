@@ -49,6 +49,12 @@ class AuthControllerTest {
         registerDto = RegisterDto.builder()
                 .username("John")
                 .password("password")
+                .email("test@email.dk")
+                .phone("12345678")
+                .street("Street 1")
+                .city("Copenhagen")
+                .zipCode("1234")
+                .country("Denmark")
                 .build();
         authResponseDto = new AuthResponseDto("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJNb3J0ZW4iLCJpYXQiOjE3MDA5MzU2MjUsImV4cCI6MTcwMDkzNTY5NX0.SRYdU2a01hOqWsHNO7brGW5cMsKeytNl3opUrODc_Tb2UDOTKM0qN6TyMIJ8Ibcs9WCE31Vdb3HyxR7KdzRI3Q");
 

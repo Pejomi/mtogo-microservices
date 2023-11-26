@@ -39,7 +39,6 @@ class ConsumerControllerTest {
     @BeforeEach
     void setUp() {
         consumerDTO = ConsumerDto.builder()
-                .email("john@doe.com")
                 .phone("12345678")
                 .city("Copenhagen")
                 .country("Denmark")

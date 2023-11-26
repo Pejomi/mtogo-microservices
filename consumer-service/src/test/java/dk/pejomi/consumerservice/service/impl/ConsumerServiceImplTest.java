@@ -31,7 +31,6 @@ class ConsumerServiceImplTest {
     void setUp() {
         consumerDTO = ConsumerDto.builder()
                 .id(1L)
-                .email("john@doe.com")
                 .phone("12345678")
                 .city("Copenhagen")
                 .country("Denmark")
@@ -41,7 +40,6 @@ class ConsumerServiceImplTest {
 
         consumer = Consumer.builder()
                 .id(1L)
-                .email("john@doe.com")
                 .phone("12345678")
                 .city("Copenhagen")
                 .country("Denmark")
