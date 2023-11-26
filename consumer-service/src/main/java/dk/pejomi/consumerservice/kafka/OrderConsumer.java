@@ -13,7 +13,7 @@ public class OrderConsumer {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderConsumer.class);
 
     @KafkaListener(
-            topics = "${spring.kafka.topic.name}"
+            topics = "order_topics"
             ,groupId = "${spring.kafka.consumer.group-id}"
     )
     public void consume(OrderEvent event){

@@ -1,7 +1,7 @@
 package dk.pejomi.consumerservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.pejomi.basedomain.dto.ConsumerDTO;
+import dk.pejomi.basedomain.dto.ConsumerDto;
 import dk.pejomi.consumerservice.service.ConsumerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,12 +34,11 @@ class ConsumerControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private ConsumerDTO consumerDTO;
+    private ConsumerDto consumerDTO;
 
     @BeforeEach
     void setUp() {
-        consumerDTO = ConsumerDTO.builder()
-                .username("John")
+        consumerDTO = ConsumerDto.builder()
                 .email("john@doe.com")
                 .phone("12345678")
                 .city("Copenhagen")
@@ -62,7 +61,7 @@ class ConsumerControllerTest {
         // Assert
         response.andExpect(status().isCreated())
                 .andExpect(result -> {
-                    ConsumerDTO consumer = objectMapper.readValue(result.getResponse().getContentAsString(), ConsumerDTO.class);
+                    ConsumerDto consumer = objectMapper.readValue(result.getResponse().getContentAsString(), ConsumerDto.class);
                     assertEquals(consumerDTO, consumer);
                 });
     }

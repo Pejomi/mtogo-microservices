@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class ConsumerDTO {
-    private String username;
+public class ConsumerDto {
+    private Long id;
     private String email;
     private String phone;
     private String street;

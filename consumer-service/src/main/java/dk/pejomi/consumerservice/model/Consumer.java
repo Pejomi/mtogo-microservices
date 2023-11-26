@@ -16,8 +16,6 @@ public class Consumer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String username;
-    private String password;
     private String email;
     private String phone;
     private String street;

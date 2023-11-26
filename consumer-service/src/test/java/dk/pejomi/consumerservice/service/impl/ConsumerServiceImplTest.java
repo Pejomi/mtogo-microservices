@@ -1,6 +1,6 @@
 package dk.pejomi.consumerservice.service.impl;
 
-import dk.pejomi.basedomain.dto.ConsumerDTO;
+import dk.pejomi.basedomain.dto.ConsumerDto;
 import dk.pejomi.consumerservice.model.Consumer;
 import dk.pejomi.consumerservice.repository.ConsumerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +15,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+
 class ConsumerServiceImplTest {
 
     @Mock
@@ -24,12 +25,12 @@ class ConsumerServiceImplTest {
     private ConsumerServiceImpl consumerService;
 
     private Consumer consumer;
-    private ConsumerDTO consumerDTO;
+    private ConsumerDto consumerDTO;
 
     @BeforeEach
     void setUp() {
-        consumerDTO = ConsumerDTO.builder()
-                .username("John")
+        consumerDTO = ConsumerDto.builder()
+                .id(1L)
                 .email("john@doe.com")
                 .phone("12345678")
                 .city("Copenhagen")
@@ -40,8 +41,6 @@ class ConsumerServiceImplTest {
 
         consumer = Consumer.builder()
                 .id(1L)
-                .username("John")
-                .password("1234")
                 .email("john@doe.com")
                 .phone("12345678")
                 .city("Copenhagen")
@@ -57,7 +56,7 @@ class ConsumerServiceImplTest {
         when(consumerRepository.save(any(Consumer.class))).thenReturn(consumer);
 
         //Act
-        ConsumerDTO actual = consumerService.createConsumer(consumerDTO);
+        ConsumerDto actual = consumerService.createConsumer(consumerDTO);
 
         //Assert
         assertEquals(consumerDTO.toString(), actual.toString());
