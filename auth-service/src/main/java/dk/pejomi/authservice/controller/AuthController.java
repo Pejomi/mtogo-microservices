@@ -2,13 +2,14 @@ package dk.pejomi.authservice.controller;
 
 import dk.pejomi.authservice.model.AuthResponseDto;
 import dk.pejomi.authservice.model.LoginDto;
-import dk.pejomi.authservice.model.RegisterDto;
-import dk.pejomi.authservice.service.UserService;
+import dk.pejomi.authservice.model.RegisterConsumerDto;
+import dk.pejomi.authservice.model.RegisterRestaurantDto;
+import dk.pejomi.authservice.service.LoginService;
+import dk.pejomi.authservice.service.RegisterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,13 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class AuthController {
 
-    private final UserService userService;
+    private final RegisterService registerService;
+    private final LoginService loginService;
 
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto) {
         try {
-            AuthResponseDto authResponse = userService.login(loginDto);
+            AuthResponseDto authResponse = loginService.login(loginDto);
             return ResponseEntity.ok(authResponse);
         } catch (AuthenticationException e) {
             // Handle authentication failure here
@@ -41,28 +43,28 @@ public class AuthController {
     }
 
     @PostMapping("/register/consumer")
-    public ResponseEntity<String> registerConsumer(@RequestBody RegisterDto registerDto) {
-        if (userService.checkEmail(registerDto.getEmail())) {
+    public ResponseEntity<String> registerConsumer(@RequestBody RegisterConsumerDto registerConsumerDto) {
+        if (registerService.checkEmail(registerConsumerDto.getEmail())) {
             return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
         }
 
         try {
-            return new ResponseEntity<>(userService.registerConsumer(registerDto), HttpStatus.CREATED);
+            return new ResponseEntity<>(registerService.registerConsumer(registerConsumerDto), HttpStatus.CREATED);
         } catch (RuntimeException e) {
-            log.error("Exception occurred while registering consumer [{}]", registerDto.getEmail(), e);
+            log.error("Exception occurred while registering consumer [{}]", registerConsumerDto.getEmail(), e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/register/restaurant")
-    public ResponseEntity<String> registerRestaurant(@RequestBody RegisterDto registerDto) {
-        if (userService.checkEmail(registerDto.getEmail())) {
+    public ResponseEntity<String> registerRestaurant(@RequestBody RegisterRestaurantDto registerRestaurantDto) {
+        if (registerService.checkEmail(registerRestaurantDto.getEmail())) {
             return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
         }
         try {
-            return new ResponseEntity<>(userService.registerRestaurant(registerDto), HttpStatus.CREATED);
+            return new ResponseEntity<>(registerService.registerRestaurant(registerRestaurantDto), HttpStatus.CREATED);
         } catch (RuntimeException e) {
-            log.error("Exception occurred while registering restaurant [{}]", registerDto.getEmail(), e);
+            log.error("Exception occurred while registering restaurant [{}]", registerRestaurantDto.getEmail(), e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

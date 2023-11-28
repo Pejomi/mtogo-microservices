@@ -13,10 +13,11 @@ public class RestaurantDto {
 
     private Long id;
     private String name;
-    private String address;
+    private String street;
     private String city;
     private String zipCode;
-    private String phoneNumber;
-    private String description;
+    private String phone;
+    private String country;
+    private String homepage;
     private String restaurantState;
 }

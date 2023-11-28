@@ -1,6 +1,7 @@
 package dk.pejomi.authservice.kafka;
 
 import dk.pejomi.basedomain.event.CreateConsumerEvent;
+import dk.pejomi.basedomain.event.CreateRestaurantEvent;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,19 @@ public class UserProducer {
 
         // create Message
         Message<CreateConsumerEvent> message = MessageBuilder
+                .withPayload(event)
+                .setHeader(KafkaHeaders.TOPIC, topic.name())
+                .build();
+        kafkaTemplate.send(message);
+
+        return event;
+    }
+
+    public CreateRestaurantEvent sendCreateRestaurant(CreateRestaurantEvent event){
+        LOGGER.info(String.format("Order event => %s", event.toString()));
+
+        // create Message
+        Message<CreateRestaurantEvent> message = MessageBuilder
                 .withPayload(event)
                 .setHeader(KafkaHeaders.TOPIC, topic.name())
                 .build();
