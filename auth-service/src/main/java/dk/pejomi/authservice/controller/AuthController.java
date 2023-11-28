@@ -31,37 +31,38 @@ public class AuthController {
             return ResponseEntity.ok(authResponse);
         } catch (AuthenticationException e) {
             // Handle authentication failure here
-            log.error("Authentication failed for user [{}]", loginDto.getUsername());
+            log.error("Authentication failed for user [{}]", loginDto.getEmail());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch (Exception e) {
             // Handle other exceptions if needed
-            log.error("Exception occurred while authenticating user [{}]", loginDto.getUsername(), e);
+            log.error("Exception occurred while authenticating user [{}]", loginDto.getEmail(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @PostMapping("/register/consumer")
     public ResponseEntity<String> registerConsumer(@RequestBody RegisterDto registerDto) {
-        if (userService.checkUsername(registerDto.getUsername())) {
-            return new ResponseEntity<>("Username already exists", HttpStatus.BAD_REQUEST);
+        if (userService.checkEmail(registerDto.getEmail())) {
+            return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
         }
+
         try {
             return new ResponseEntity<>(userService.registerConsumer(registerDto), HttpStatus.CREATED);
         } catch (RuntimeException e) {
-            log.error("Exception occurred while registering consumer [{}]", registerDto.getUsername(), e);
+            log.error("Exception occurred while registering consumer [{}]", registerDto.getEmail(), e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/register/restaurant")
     public ResponseEntity<String> registerRestaurant(@RequestBody RegisterDto registerDto) {
-        if (userService.checkUsername(registerDto.getUsername())) {
-            return new ResponseEntity<>("Username already exists", HttpStatus.BAD_REQUEST);
+        if (userService.checkEmail(registerDto.getEmail())) {
+            return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
         }
         try {
             return new ResponseEntity<>(userService.registerRestaurant(registerDto), HttpStatus.CREATED);
         } catch (RuntimeException e) {
-            log.error("Exception occurred while registering restaurant [{}]", registerDto.getUsername(), e);
+            log.error("Exception occurred while registering restaurant [{}]", registerDto.getEmail(), e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

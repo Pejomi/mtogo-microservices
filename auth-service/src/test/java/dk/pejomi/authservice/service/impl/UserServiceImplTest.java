@@ -20,12 +20,11 @@ class UserServiceImplTest {
     void setUp() {
         user = User.builder()
                 .id(1L)
-                .username("John")
                 .email("test@mail.dk")
                 .password("password")
                 .build();
         loginDto = LoginDto.builder()
-                .username("John")
+                .email("test@mail.dk")
                 .password("Password")
                 .build();
     }

@@ -5,10 +5,8 @@ import dk.pejomi.authservice.model.LoginDto;
 import dk.pejomi.authservice.model.RegisterDto;
 
 public interface UserService {
-
     AuthResponseDto login(LoginDto loginDto);
     String registerConsumer(RegisterDto registerDto);
     String registerRestaurant(RegisterDto registerDto);
-    Boolean checkUsername(String username);
-
+    Boolean checkEmail(String email);
 }

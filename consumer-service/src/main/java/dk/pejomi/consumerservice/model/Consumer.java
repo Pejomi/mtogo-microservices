@@ -14,8 +14,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "consumers")
 public class Consumer {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long userId;
     private String phone;
     private String street;
     private String city;

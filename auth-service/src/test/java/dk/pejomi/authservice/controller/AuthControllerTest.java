@@ -43,13 +43,12 @@ class AuthControllerTest {
     @BeforeEach
     public void init() {
         loginDto = LoginDto.builder()
-                .username("John")
+                .email("test@email.dk")
                 .password("password")
                 .build();
         registerDto = RegisterDto.builder()
-                .username("John")
-                .password("password")
                 .email("test@email.dk")
+                .password("password")
                 .phone("12345678")
                 .street("Street 1")
                 .city("Copenhagen")
@@ -85,7 +84,7 @@ class AuthControllerTest {
     @Test
     void should_return_400_when_consumer_register_with_existing_username() throws Exception {
         // Arrange
-        when(userService.checkUsername(any(String.class))).thenReturn(true);
+        when(userService.checkEmail(any(String.class))).thenReturn(true);
 
         mockMvc.perform(post("/api/auth/register/consumer")
                         .contentType("application/json")
@@ -97,7 +96,7 @@ class AuthControllerTest {
     @Test
     void should_return_201_when_consumer_register_successfully() throws Exception {
         // Arrange
-        when(userService.checkUsername(any(String.class))).thenReturn(false);
+        when(userService.checkEmail(any(String.class))).thenReturn(false);
         when(userService.registerConsumer(any(RegisterDto.class))).thenReturn("User registered successfully");
 
         mockMvc.perform(post("/api/auth/register/consumer")
@@ -109,7 +108,7 @@ class AuthControllerTest {
     @Test
     void should_return_500_when_consumer_register_with_exception() throws Exception {
         // Arrange
-        when(userService.checkUsername(any(String.class))).thenReturn(false);
+        when(userService.checkEmail(any(String.class))).thenReturn(false);
         when(userService.registerConsumer(any(RegisterDto.class))).thenThrow(new RuntimeException("Error registering user"));
 
         mockMvc.perform(post("/api/auth/register/consumer")
@@ -121,7 +120,7 @@ class AuthControllerTest {
     @Test
     void should_return_400_when_restaurant_register_with_existing_username() throws Exception {
         // Arrange
-        when(userService.checkUsername(any(String.class))).thenReturn(true);
+        when(userService.checkEmail(any(String.class))).thenReturn(true);
 
         mockMvc.perform(post("/api/auth/register/restaurant")
                         .contentType("application/json")
@@ -132,7 +131,7 @@ class AuthControllerTest {
     @Test
     void should_return_201_when_restaurant_register_successfully() throws Exception {
         // Arrange
-        when(userService.checkUsername(any(String.class))).thenReturn(false);
+        when(userService.checkEmail(any(String.class))).thenReturn(false);
         when(userService.registerRestaurant(any(RegisterDto.class))).thenReturn("User registered successfully");
 
         mockMvc.perform(post("/api/auth/register/restaurant")
@@ -144,7 +143,7 @@ class AuthControllerTest {
     @Test
     void should_return_500_when_restaurant_register_with_exception() throws Exception {
         // Arrange
-        when(userService.checkUsername(any(String.class))).thenReturn(false);
+        when(userService.checkEmail(any(String.class))).thenReturn(false);
         when(userService.registerRestaurant(any(RegisterDto.class))).thenThrow(new RuntimeException("Error registering user"));
 
         mockMvc.perform(post("/api/auth/register/restaurant")

@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,14 +23,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 45)
-    private String username;
-
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false, length = 64)
     private String password;
+    @Column
+    private LocalDateTime createdAt;
 
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -39,5 +40,9 @@ public class User {
     )
     private List<Role> roles = new ArrayList<>();
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 
 }

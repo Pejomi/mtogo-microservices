@@ -11,7 +11,7 @@ public interface ConsumerMapper {
 
         ConsumerMapper INSTANCE = Mappers.getMapper( ConsumerMapper.class );
 
-        @Mapping(target = "id", ignore = true)
+        @Mapping(target = "userId", source = "id")
         Consumer toConsumer(ConsumerDto consumerDTO);
 
         ConsumerDto toConsumerDTO(Consumer consumer);

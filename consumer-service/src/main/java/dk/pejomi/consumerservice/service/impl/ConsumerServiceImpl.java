@@ -16,8 +16,9 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     @Override
     public ConsumerDto createConsumer(ConsumerDto consumerDTO) {
-        Consumer consumer = consumerRepository.save(
-                ConsumerMapper.INSTANCE.toConsumer(consumerDTO));
+
+        Consumer consumer = consumerRepository.save(ConsumerMapper.INSTANCE.toConsumer(consumerDTO));
+
         return ConsumerMapper.INSTANCE.toConsumerDTO(consumer);
     }
 }
