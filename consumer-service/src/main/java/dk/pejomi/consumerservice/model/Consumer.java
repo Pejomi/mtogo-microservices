@@ -17,9 +17,14 @@ public class Consumer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userId;
+    @Column(nullable = false)
     private String phone;
+    @Column(nullable = false)
     private String street;
+    @Column(nullable = false)
     private String city;
+    @Column(nullable = false)
     private String zipCode;
+    @Column(nullable = false)
     private String country;
 }

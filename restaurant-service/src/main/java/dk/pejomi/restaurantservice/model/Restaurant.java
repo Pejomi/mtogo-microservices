@@ -17,13 +17,21 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userId;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String street;
+    @Column(nullable = false)
     private String city;
+    @Column(nullable = false)
     private String zipCode;
+    @Column(nullable = false)
     private String phone;
+    @Column(nullable = false)
     private String country;
+    @Column(nullable = false)
     private String homepage;
+    @Column(nullable = false)
     private String restaurantState;
 
 }
