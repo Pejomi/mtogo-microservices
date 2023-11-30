@@ -1,8 +1,8 @@
-package dk.pejomi.consumerservice.service.impl;
+package dk.pejomi.restaurantservice.service.impl;
 
-import dk.pejomi.basedomain.dto.ConsumerDto;
-import dk.pejomi.consumerservice.model.Consumer;
-import dk.pejomi.consumerservice.repository.ConsumerRepository;
+import dk.pejomi.basedomain.dto.RestaurantDto;
+import dk.pejomi.restaurantservice.model.Restaurant;
+import dk.pejomi.restaurantservice.repository.RestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,25 +10,26 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ConsumerServiceImplTest {
+class RestaurantServiceImplTest {
 
     @Mock
-    private ConsumerRepository consumerRepository;
+    private RestaurantRepository restaurantRepository;
 
     @InjectMocks
-    private ConsumerServiceImpl consumerService;
+    private RestaurantServiceImpl restaurantService;
 
-    private Consumer consumer;
-    private ConsumerDto consumerDTO;
+    private Restaurant restaurant;
+
+    private RestaurantDto restaurantDTO;
 
     @BeforeEach
     void setUp() {
-        consumerDTO = ConsumerDto.builder()
+        restaurantDTO = RestaurantDto.builder()
                 .id(1L)
                 .phone("12345678")
                 .city("Copenhagen")
@@ -37,7 +38,7 @@ class ConsumerServiceImplTest {
                 .zipCode("1234")
                 .build();
 
-        consumer = Consumer.builder()
+        restaurant = Restaurant.builder()
                 .id(1L)
                 .phone("12345678")
                 .city("Copenhagen")
@@ -48,14 +49,15 @@ class ConsumerServiceImplTest {
     }
 
     @Test
-    void should_return_consumer_when_creating_consumer() {
+    void should_return_restaurant_when_creating_restaurant() {
         //Arrange
-        when(consumerRepository.save(any(Consumer.class))).thenReturn(consumer);
+        when(restaurantRepository.save(any(Restaurant.class))).thenReturn(restaurant);
 
         //Act
-        ConsumerDto actual = consumerService.createConsumer(consumerDTO);
+        RestaurantDto actual = restaurantService.createRestaurant(restaurantDTO);
 
         //Assert
-        assertEquals(consumerDTO.toString(), actual.toString());
+        assertEquals(restaurantDTO.toString(), actual.toString());
     }
+
 }

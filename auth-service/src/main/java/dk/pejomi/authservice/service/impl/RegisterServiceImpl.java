@@ -1,6 +1,7 @@
 package dk.pejomi.authservice.service.impl;
 
-import dk.pejomi.authservice.kafka.UserProducer;
+import dk.pejomi.authservice.kafka.CreateConsumerProducer;
+import dk.pejomi.authservice.kafka.CreateRestaurantProducer;
 import dk.pejomi.authservice.model.RegisterConsumerDto;
 import dk.pejomi.authservice.model.RegisterRestaurantDto;
 import dk.pejomi.authservice.model.Role;
@@ -24,14 +25,12 @@ import java.util.Collections;
 @Slf4j
 public class RegisterServiceImpl implements RegisterService {
 
-
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private final UserProducer userProducer;
-
-
+    private final CreateConsumerProducer createConsumerProducer;
+    private final CreateRestaurantProducer createRestaurantProducer;
 
     @Override
     public String registerConsumer(RegisterConsumerDto registerConsumerDto) {
@@ -68,7 +67,7 @@ public class RegisterServiceImpl implements RegisterService {
                 .consumerDTO(consumerDTO)
                 .build();
 
-        userProducer.sendCreateConsumer(createConsumerEvent);
+        createConsumerProducer.sendCreateConsumer(createConsumerEvent);
 
         return "User registered successfully";
     }
@@ -100,7 +99,7 @@ public class RegisterServiceImpl implements RegisterService {
                 .zipCode(registerRestaurantDto.getZipCode())
                 .country(registerRestaurantDto.getCountry())
                 .homepage(registerRestaurantDto.getHomepage())
-                .restaurantState(registerRestaurantDto.getRestaurantState())
+                .restaurantState("PENDING")
                 .build();
 
         // Send event to restaurant-service with kafka
@@ -109,7 +108,7 @@ public class RegisterServiceImpl implements RegisterService {
                 .restaurantDto(restaurantDTO)
                 .build();
 
-        userProducer.sendCreateRestaurant(createRestaurantEvent);
+        createRestaurantProducer.sendCreateRestaurant(createRestaurantEvent);
 
 
         return "User registered successfully";

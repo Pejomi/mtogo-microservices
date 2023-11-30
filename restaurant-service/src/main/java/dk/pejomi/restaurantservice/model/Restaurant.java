@@ -1,4 +1,4 @@
-package dk.pejomi.consumerservice.model;
+package dk.pejomi.restaurantservice.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "consumers")
-public class Consumer {
+@Table(name = "restaurants")
+public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userId;
     @Column(nullable = false)
-    private String phone;
+    private String name;
     @Column(nullable = false)
     private String street;
     @Column(nullable = false)
@@ -26,5 +26,12 @@ public class Consumer {
     @Column(nullable = false)
     private String zipCode;
     @Column(nullable = false)
+    private String phone;
+    @Column(nullable = false)
     private String country;
+    @Column(nullable = false)
+    private String homepage;
+    @Column(nullable = false)
+    private String restaurantState;
+
 }

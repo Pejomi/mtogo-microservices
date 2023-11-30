@@ -1,7 +1,8 @@
 package dk.pejomi.authservice.service.impl;
 
 import dk.pejomi.authservice.config.SecurityConfig;
-import dk.pejomi.authservice.kafka.UserProducer;
+import dk.pejomi.authservice.kafka.CreateConsumerProducer;
+import dk.pejomi.authservice.kafka.CreateRestaurantProducer;
 import dk.pejomi.authservice.model.RegisterConsumerDto;
 import dk.pejomi.authservice.model.RegisterRestaurantDto;
 import dk.pejomi.authservice.model.Role;
@@ -21,7 +22,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,7 +38,10 @@ class RegisterServiceImplTest {
     @Mock
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Mock
-    private UserProducer userProducer;
+    private CreateConsumerProducer createConsumerProducer;
+
+    @Mock
+    private CreateRestaurantProducer createRestaurantProducer;
 
     @InjectMocks
     private RegisterServiceImpl registerService;
@@ -96,7 +101,7 @@ class RegisterServiceImplTest {
         // Arrange
         when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
         when(roleRepository.findByName(Mockito.anyString())).thenReturn(java.util.Optional.of(consumerRole));
-        when(userProducer.sendCreateConsumer(Mockito.any(CreateConsumerEvent.class))).thenReturn(new CreateConsumerEvent());
+        when(createConsumerProducer.sendCreateConsumer(Mockito.any(CreateConsumerEvent.class))).thenReturn(new CreateConsumerEvent());
         // Act
 
         String actual = registerService.registerConsumer(registerConsumerDto);
@@ -130,7 +135,7 @@ class RegisterServiceImplTest {
         // Arrange
         when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
         when(roleRepository.findByName(Mockito.anyString())).thenReturn(java.util.Optional.of(restaurantRole));
-        when(userProducer.sendCreateRestaurant(Mockito.any(CreateRestaurantEvent.class))).thenReturn(new CreateRestaurantEvent());
+        when(createRestaurantProducer.sendCreateRestaurant(Mockito.any(CreateRestaurantEvent.class))).thenReturn(new CreateRestaurantEvent());
         // Act
 
         String actual = registerService.registerRestaurant(registerRestaurantDto);
