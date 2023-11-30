@@ -1,16 +1,20 @@
-package dk.pejomi.basedomain.dto;
+package dk.pejomi.restaurantservice.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RestaurantDto {
-
+@Table(name = "restaurants")
+public class Restaurant {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userId;
     private String name;
@@ -21,4 +25,5 @@ public class RestaurantDto {
     private String country;
     private String homepage;
     private String restaurantState;
+
 }

@@ -13,6 +13,5 @@ import lombok.NoArgsConstructor;
 public class CreateRestaurantEvent {
 
     private String message;
-    private String status;
     private RestaurantDto restaurantDto;
 }

@@ -9,13 +9,21 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaTopicConfig {
 
-    @Value("${spring.kafka.topic.name}")
-    private String topicName;
+    @Value("${spring.kafka.consumer-topic.name}")
+    private String topicConsumer;
 
-    // spring bean for kafka topic
+    @Value("${spring.kafka.restaurant-topic.name}")
+    private String topicRestaurant;
+
     @Bean
-    public NewTopic topic(){
-        return TopicBuilder.name(topicName)
+    public NewTopic topicConsumer(){
+        return TopicBuilder.name(topicConsumer)
+                .build();
+    }
+
+    @Bean
+    public NewTopic topicRestaurant(){
+        return TopicBuilder.name(topicRestaurant)
                 .build();
     }
 }
