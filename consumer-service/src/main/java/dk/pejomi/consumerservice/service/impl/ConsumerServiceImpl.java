@@ -1,5 +1,6 @@
 package dk.pejomi.consumerservice.service.impl;
 
+import dk.pejomi.basedomain.dto.OrderDto;
 import dk.pejomi.consumerservice.dto.ConsumerDTO;
 import dk.pejomi.consumerservice.mapper.ConsumerMapper;
 import dk.pejomi.consumerservice.model.Consumer;
@@ -20,4 +21,5 @@ public class ConsumerServiceImpl implements ConsumerService {
                 ConsumerMapper.INSTANCE.toConsumer(consumerDTO));
         return ConsumerMapper.INSTANCE.toConsumerDTO(consumer);
     }
+
 }
