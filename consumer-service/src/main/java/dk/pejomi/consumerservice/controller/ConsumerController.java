@@ -1,6 +1,6 @@
 package dk.pejomi.consumerservice.controller;
 
-import dk.pejomi.consumerservice.dto.ConsumerDTO;
+import dk.pejomi.basedomain.dto.ConsumerDto;
 import dk.pejomi.consumerservice.service.ConsumerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,7 @@ public class ConsumerController {
     private final ConsumerService consumerService;
 
     @PostMapping
-    public ResponseEntity<ConsumerDTO> createConsumer(@RequestBody ConsumerDTO consumerDTO) {
+    public ResponseEntity<ConsumerDto> createConsumer(@RequestBody ConsumerDto consumerDTO) {
         return new ResponseEntity<>(consumerService.createConsumer(consumerDTO), HttpStatus.CREATED);
     }
 }

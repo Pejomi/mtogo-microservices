@@ -1,20 +1,22 @@
-package dk.pejomi.consumerservice.dto;
+package dk.pejomi.authservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Builder
-public class ConsumerDTO {
-    private String username;
+@AllArgsConstructor
+@NoArgsConstructor
+public class RegisterConsumerDto {
+
     private String email;
+    private String password;
     private String phone;
     private String street;
     private String city;
     private String zipCode;
     private String country;
+
 }

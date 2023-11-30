@@ -1,6 +1,6 @@
 package dk.pejomi.orderservice.kafka;
 
-import dk.pejomi.basedomain.dto.OrderEvent;
+import dk.pejomi.basedomain.event.OrderEvent;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
