@@ -9,8 +9,9 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaTopicConfig {
 
-    @Value("${spring.kafka.topic.name}")
+    @Value("${spring.kafka.order_topic.name}")
     private String topicName;
+
 
     // spring bean for kafka topic
     @Bean
@@ -18,4 +19,6 @@ public class KafkaTopicConfig {
         return TopicBuilder.name(topicName)
                 .build();
     }
+
+
 }
