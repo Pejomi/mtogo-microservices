@@ -1,5 +1,6 @@
-package dk.pejomi.basedomain.dto;
+package dk.pejomi.basedomain.event;
 
+import dk.pejomi.basedomain.dto.RestaurantDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderEvent {
+public class CreateRestaurantEvent {
+
     private String message;
     private String status;
-    private OrderDto orderDto;
+    private RestaurantDto restaurantDto;
 }

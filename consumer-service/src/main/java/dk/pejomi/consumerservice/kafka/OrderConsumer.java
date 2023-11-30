@@ -1,13 +1,11 @@
 package dk.pejomi.consumerservice.kafka;
 
-
-import dk.pejomi.basedomain.dto.OrderEvent;
 import lombok.Getter;
+import dk.pejomi.basedomain.event.OrderEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-
 import java.util.concurrent.CountDownLatch;
 
 @Service
@@ -19,7 +17,7 @@ public class OrderConsumer {
 
 
     @KafkaListener(
-            topics = "${spring.kafka.topic.name}"
+            topics = "order_topics"
             ,groupId = "${spring.kafka.consumer.group-id}"
     )
     public void consume(OrderEvent event){

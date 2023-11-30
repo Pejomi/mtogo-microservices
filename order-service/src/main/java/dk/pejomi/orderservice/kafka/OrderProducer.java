@@ -1,8 +1,6 @@
 package dk.pejomi.orderservice.kafka;
 
-import dk.pejomi.basedomain.dto.OrderEvent;
-import lombok.Getter;
-import lombok.Setter;
+import dk.pejomi.basedomain.event.OrderEvent;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +11,6 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 @Service
-@Getter
-@Setter
 public class OrderProducer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderProducer.class);

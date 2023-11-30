@@ -15,6 +15,7 @@
         <module>base-domain</module>
         <module>order-service</module>
         <module>consumer-service</module>
+        <module>auth-service</module>
     </modules>
 
     <properties>
@@ -66,6 +67,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.1.5</version>
                 <configuration>
                     <image>
                         <builder>paketobuildpacks/builder-jammy-base:latest</builder>

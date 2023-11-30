@@ -1,13 +1,11 @@
 package dk.pejomi.consumerservice.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.pejomi.consumerservice.dto.ConsumerDTO;
+import dk.pejomi.basedomain.dto.ConsumerDto;
 import dk.pejomi.consumerservice.service.ConsumerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,10 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,13 +34,11 @@ class ConsumerControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private ConsumerDTO consumerDTO;
+    private ConsumerDto consumerDTO;
 
     @BeforeEach
     void setUp() {
-        consumerDTO = ConsumerDTO.builder()
-                .username("John")
-                .email("john@doe.com")
+        consumerDTO = ConsumerDto.builder()
                 .phone("12345678")
                 .city("Copenhagen")
                 .country("Denmark")
@@ -66,7 +60,7 @@ class ConsumerControllerTest {
         // Assert
         response.andExpect(status().isCreated())
                 .andExpect(result -> {
-                    ConsumerDTO consumer = objectMapper.readValue(result.getResponse().getContentAsString(), ConsumerDTO.class);
+                    ConsumerDto consumer = objectMapper.readValue(result.getResponse().getContentAsString(), ConsumerDto.class);
                     assertEquals(consumerDTO, consumer);
                 });
     }

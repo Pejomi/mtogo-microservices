@@ -1,7 +1,7 @@
 package dk.pejomi.orderservice.service.impl;
 
 import dk.pejomi.basedomain.dto.OrderDto;
-import dk.pejomi.basedomain.dto.OrderEvent;
+import dk.pejomi.basedomain.event.OrderEvent;
 import dk.pejomi.basedomain.dto.OrderItemDto;
 import dk.pejomi.orderservice.kafka.OrderProducer;
 import dk.pejomi.orderservice.model.Order;

@@ -1,22 +1,16 @@
-package dk.pejomi.consumerservice.model;
+package dk.pejomi.basedomain.dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Builder
-@Table(name = "consumers")
-public class Consumer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ConsumerDto {
     private Long id;
-    private Long userId;
     private String phone;
     private String street;
     private String city;
