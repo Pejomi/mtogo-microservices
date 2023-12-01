@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class RestaurantDto {
 
     private Long id;
+    private Long userId;
     private String name;
     private String street;
     private String city;
