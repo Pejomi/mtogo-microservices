@@ -1,7 +1,6 @@
 package dk.pejomi.authservice.service.impl;
 
-import dk.pejomi.authservice.kafka.CreateConsumerProducer;
-import dk.pejomi.authservice.kafka.CreateRestaurantProducer;
+import dk.pejomi.authservice.kafka.UserProducer;
 import dk.pejomi.authservice.model.RegisterConsumerDto;
 import dk.pejomi.authservice.model.RegisterRestaurantDto;
 import dk.pejomi.authservice.model.Role;
@@ -29,8 +28,7 @@ public class RegisterServiceImpl implements RegisterService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private final CreateConsumerProducer createConsumerProducer;
-    private final CreateRestaurantProducer createRestaurantProducer;
+    private final UserProducer userProducer;
 
     @Override
     public String registerConsumer(RegisterConsumerDto registerConsumerDto) {
@@ -67,7 +65,7 @@ public class RegisterServiceImpl implements RegisterService {
                 .consumerDTO(consumerDTO)
                 .build();
 
-        createConsumerProducer.sendCreateConsumer(createConsumerEvent);
+        userProducer.sendCreateConsumer(createConsumerEvent);
 
         return "User registered successfully";
     }
@@ -108,7 +106,7 @@ public class RegisterServiceImpl implements RegisterService {
                 .restaurantDto(restaurantDTO)
                 .build();
 
-        createRestaurantProducer.sendCreateRestaurant(createRestaurantEvent);
+        userProducer.sendCreateRestaurant(createRestaurantEvent);
 
 
         return "User registered successfully";

@@ -1,8 +1,7 @@
 package dk.pejomi.authservice.service.impl;
 
 import dk.pejomi.authservice.config.SecurityConfig;
-import dk.pejomi.authservice.kafka.CreateConsumerProducer;
-import dk.pejomi.authservice.kafka.CreateRestaurantProducer;
+import dk.pejomi.authservice.kafka.UserProducer;
 import dk.pejomi.authservice.model.RegisterConsumerDto;
 import dk.pejomi.authservice.model.RegisterRestaurantDto;
 import dk.pejomi.authservice.model.Role;
@@ -38,10 +37,7 @@ class RegisterServiceImplTest {
     @Mock
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Mock
-    private CreateConsumerProducer createConsumerProducer;
-
-    @Mock
-    private CreateRestaurantProducer createRestaurantProducer;
+    private UserProducer userProducer;
 
     @InjectMocks
     private RegisterServiceImpl registerService;
@@ -101,7 +97,7 @@ class RegisterServiceImplTest {
         // Arrange
         when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
         when(roleRepository.findByName(Mockito.anyString())).thenReturn(java.util.Optional.of(consumerRole));
-        when(createConsumerProducer.sendCreateConsumer(Mockito.any(CreateConsumerEvent.class))).thenReturn(new CreateConsumerEvent());
+        when(userProducer.sendCreateConsumer(Mockito.any(CreateConsumerEvent.class))).thenReturn(new CreateConsumerEvent());
         // Act
 
         String actual = registerService.registerConsumer(registerConsumerDto);
@@ -135,7 +131,7 @@ class RegisterServiceImplTest {
         // Arrange
         when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
         when(roleRepository.findByName(Mockito.anyString())).thenReturn(java.util.Optional.of(restaurantRole));
-        when(createRestaurantProducer.sendCreateRestaurant(Mockito.any(CreateRestaurantEvent.class))).thenReturn(new CreateRestaurantEvent());
+        when(userProducer.sendCreateRestaurant(Mockito.any(CreateRestaurantEvent.class))).thenReturn(new CreateRestaurantEvent());
         // Act
 
         String actual = registerService.registerRestaurant(registerRestaurantDto);
