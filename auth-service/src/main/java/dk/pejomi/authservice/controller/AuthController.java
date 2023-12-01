@@ -11,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -27,6 +24,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto) {
         try {
             AuthResponseDto authResponse = loginService.login(loginDto);
@@ -43,6 +41,7 @@ public class AuthController {
     }
 
     @PostMapping("/register/consumer")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<String> registerConsumer(@RequestBody RegisterConsumerDto registerConsumerDto) {
         if (registerService.checkEmail(registerConsumerDto.getEmail())) {
             return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
@@ -57,6 +56,7 @@ public class AuthController {
     }
 
     @PostMapping("/register/restaurant")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<String> registerRestaurant(@RequestBody RegisterRestaurantDto registerRestaurantDto) {
         if (registerService.checkEmail(registerRestaurantDto.getEmail())) {
             return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
