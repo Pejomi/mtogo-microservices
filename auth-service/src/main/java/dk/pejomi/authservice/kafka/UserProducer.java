@@ -17,19 +17,15 @@ public class UserProducer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserProducer.class);
 
-//    private NewTopic topic;
-
-    /////
     @Value("${spring.kafka.consumer_topic.name}")
     private String consumerTopicName;
 
     @Value("${spring.kafka.restaurant_topic.name}")
     private String restaurantTopicName;
-    /////
 
     private KafkaTemplate<String, CreateConsumerEvent> kafkaTemplate;
 
-    public UserProducer(NewTopic topic, KafkaTemplate<String, CreateConsumerEvent> kafkaTemplate) {
+    public UserProducer(KafkaTemplate<String, CreateConsumerEvent> kafkaTemplate) {
 //        this.topic = topic;
         this.kafkaTemplate = kafkaTemplate;
     }
@@ -40,7 +36,6 @@ public class UserProducer {
         // create Message
         Message<CreateConsumerEvent> message = MessageBuilder
                 .withPayload(event)
-//                .setHeader(KafkaHeaders.TOPIC, topic.name())
                 .setHeader(KafkaHeaders.TOPIC, consumerTopicName)
                 .build();
         kafkaTemplate.send(message);
@@ -54,7 +49,6 @@ public class UserProducer {
         // create Message
         Message<CreateRestaurantEvent> message = MessageBuilder
                 .withPayload(event)
-//                .setHeader(KafkaHeaders.TOPIC, topic.name())
                 .setHeader(KafkaHeaders.TOPIC, restaurantTopicName)
                 .build();
         kafkaTemplate.send(message);
