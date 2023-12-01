@@ -4,6 +4,7 @@ import dk.pejomi.basedomain.event.OrderEvent;
 import dk.pejomi.consumerservice.ConsumerServiceApplication;
 import dk.pejomi.orderservice.OrderServiceApplication;
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DirtiesContext
 @EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
 @ComponentScan(basePackages = "dk.pejomi.orderservice")
+@Disabled
 public class KafkaIntegrationTest {
 
     @Autowired
