@@ -22,10 +22,10 @@ class RestaurantRepositoryTest {
     private RestaurantRepository restaurantRepository;
 
 
-    private static Restaurant restaurant;
+    private Restaurant restaurant;
 
-    @BeforeAll
-    static void beforeAll() {
+    @BeforeEach
+    void beforeAll() {
         restaurant = Restaurant.builder()
                 .name("Restaurant")
                 .street("Street 1")
