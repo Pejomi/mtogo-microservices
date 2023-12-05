@@ -4,12 +4,12 @@ services:
   mysql:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: auth_service
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
+      MYSQL_USER: root_user
+      MYSQL_PASSWORD: root_password
     ports:
-      - "3306:3306"
+      - "3308:3308"
 
   auth-service:
     build:
@@ -20,6 +20,7 @@ services:
     depends_on:
       - mysql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/auth_service
+     # SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/auth_service
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/auth-service
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
