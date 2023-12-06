@@ -6,10 +6,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,7 +20,7 @@ public class MenuController implements MenuApi {
 
     @Override
     @GetMapping("/{id}")
-    public ResponseEntity<MenuDto> getMenuById(Long id) {
+    public ResponseEntity<MenuDto> getMenuById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(menuService.getMenuById(id));
         } catch (EntityNotFoundException e) {
@@ -34,7 +31,7 @@ public class MenuController implements MenuApi {
 
     @Override
     @GetMapping("/restaurant/{id}")
-    public ResponseEntity<List<MenuDto>> getMenuByRestaurantId(Long id) {
+    public ResponseEntity<List<MenuDto>> getMenuByRestaurantId(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(menuService.getAllMenusByRestaurantId(id));
         } catch (EntityNotFoundException e) {
@@ -45,7 +42,7 @@ public class MenuController implements MenuApi {
 
     @Override
     @PostMapping
-    public ResponseEntity<MenuDto> createMenu(MenuDto menuDto) {
+    public ResponseEntity<MenuDto> createMenu(@RequestBody MenuDto menuDto) {
         try {
             return ResponseEntity.ok(menuService.createMenu(menuDto));
         } catch (RuntimeException e) {
