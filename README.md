@@ -16,3 +16,15 @@ The browser might ask for credentials when accessing the swagger-ui.html page. S
 Like this:
 `Using generated security password: ce923da1-e0a7-449f-8e03-d9e74c0f1461` (the password is different every time)
 
+
+### JIB image-building command:
+mvn -pl auth-service,order-service jib:dockerBuild
+
+### kubectl commands:
+* minikube start
+* minikube dashboard
+* kubectl apply -f <yaml-file>
+* kubectl delete -f <yaml-file>
+* kubectl get pods
+* kubectl describe pod <pod-name>
+

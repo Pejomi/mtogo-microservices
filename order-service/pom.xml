@@ -70,12 +70,7 @@
                 <version>3.4.0</version>
                 <configuration>
                     <to>
-<!--                        <image>peternedergaard/order-service:${project.version}</image>-->
-                        <image>order-service:latest</image>
-                        <auth>
-                            <username>peternedergaard</username>
-                            <password>****</password>
-                        </auth>
+                        <image>${docker.username}/${project.artifactId}:latest</image>
                     </to>
                 </configuration>
             </plugin>
