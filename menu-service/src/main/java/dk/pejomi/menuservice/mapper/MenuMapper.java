@@ -23,6 +23,7 @@ public interface MenuMapper {
 
     MenuItemDto menuItemToMenuItemDto(MenuItem menuItem);
 
+    @Mapping(target = "menu", ignore = true )
     MenuItem menuItemDtoToMenuItem(MenuItemDto menuItemDto);
 
 }
