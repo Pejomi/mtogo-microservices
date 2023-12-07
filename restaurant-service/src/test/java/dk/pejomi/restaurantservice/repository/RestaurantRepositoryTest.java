@@ -25,7 +25,7 @@ class RestaurantRepositoryTest {
     private Restaurant restaurant;
 
     @BeforeEach
-    void beforeAll() {
+    void beforeEach() {
         restaurant = Restaurant.builder()
                 .name("Restaurant")
                 .street("Street 1")

@@ -1,9 +1,11 @@
 package dk.pejomi.restaurantservice.service;
 
 import dk.pejomi.basedomain.dto.RestaurantDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface RestaurantService {
 
     RestaurantDto createRestaurant(RestaurantDto restaurantDTO);

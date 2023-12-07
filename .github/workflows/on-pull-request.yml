@@ -23,20 +23,7 @@ jobs:
         run: chmod +x mvnw
 
       - name: Build Spring Boot Project
-        run: ./mvnw clean install
+        run: ./mvnw clean install -DskipTests
 
       - name: Run Tests
-        run: |
-          ./mvnw test
-
-
-      # Adjust this command based on your project's test execution command
-
-#      - name: Check Test Results
-#        run: |
-#          if [ -f target/surefire-reports/TEST-*.xml ]; then
-#            echo "Tests passed"
-#          else
-#            echo "Tests failed"
-#            exit 1
-#          fi
+        run: ./mvnw test
