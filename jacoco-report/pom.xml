@@ -24,11 +24,6 @@
         </dependency>
         <dependency>
             <groupId>dk.pejomi</groupId>
-            <artifactId>base-domain</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>dk.pejomi</groupId>
             <artifactId>consumer-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
@@ -42,6 +37,11 @@
             <artifactId>restaurant-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>dk.pejomi</groupId>
+            <artifactId>menu-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -49,7 +49,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
+                <version>0.8.10</version>
                 <executions>
                     <execution>
                         <phase>verify</phase>
@@ -57,6 +57,20 @@
                             <goal>report-aggregate</goal>
                         </goals>
                         <configuration>
+                            <excludes>
+                                <!-- Exclude main class -->
+                                <exclude>**/*ServiceApplication.class</exclude>
+                                <!-- Exclude model classes -->
+                                <exclude>**/model/*</exclude>
+                                <!-- Exclude Mapper classes -->
+                                <exclude>**/mapper/*</exclude>
+                                <!-- Exclude dto classes -->
+                                <exclude>**/dto/*</exclude>
+                                <!-- Exclude CustomUserDetails -->
+                                <exclude>**/CustomUserDetailsService.class</exclude>
+                                <!-- Exclude Config folder -->
+                                <exclude>**/config/*</exclude>
+                            </excludes>
                             <dataFileIncludes>
                                 <dataFileInclude>**/jacoco.exec</dataFileInclude>
                             </dataFileIncludes>

@@ -33,6 +33,7 @@
         <spring-cloud.version>2022.0.4</spring-cloud.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <docker.username>peternedergaard</docker.username>
+        <jacoco.code.coverage>0.00</jacoco.code.coverage>
     </properties>
 
     <dependencyManagement>
@@ -74,6 +75,7 @@
 
     <build>
         <plugins>
+            <!-- Spring Boot Plugin-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -91,6 +93,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- mavne-compiler-plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -115,46 +118,84 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+            <!-- Jacoco Test Coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
+                <version>0.8.10</version>
+                <configuration>
+                    <excludes>
+                        <!-- Exclude main class -->
+                        <exclude>**/*ServiceApplication.class</exclude>
+                        <!-- Exclude model classes -->
+                        <exclude>**/model/*</exclude>
+                        <!-- Exclude Mapper classes -->
+                        <exclude>**/mapper/*</exclude>
+                        <!-- Exclude dto classes -->
+                        <exclude>**/dto/*</exclude>
+                        <!-- Exclude CustomUserDetails -->
+                        <exclude>**/CustomUserDetailsService.class</exclude>
+                        <!-- Exclude Config folder -->
+                        <exclude>**/config/*</exclude>
+                    </excludes>
+                    <rules>
+                        <rule>
+                            <!-- Class Rule -->
+                            <element>CLASS</element>
+                            <limits>
+                                <!-- Line coverage %: Defined in root pom properties -->
+                                <limit>
+                                    <counter>LINE</counter>
+                                    <value>COVEREDRATIO</value>
+                                    <minimum>${jacoco.code.coverage}</minimum>
+                                </limit>
+                                <!-- Branch coverage %: Defined in root pom properties -->
+                                <limit>
+                                    <counter>BRANCH</counter>
+                                    <value>COVEREDRATIO</value>
+                                    <minimum>${jacoco.code.coverage}</minimum>
+                                </limit>
+                            </limits>
+                        </rule>
+                    </rules>
+                </configuration>
                 <executions>
+                    <!-- Initialise Jacoco -->
                     <execution>
+                        <id>default-prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
-<!--                    <execution>-->
-<!--                        <id>jacoco-check</id>-->
-<!--                        <goals>-->
-<!--                            <goal>check</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <rules>-->
-<!--                                <rule>-->
-<!--                                    <element>PACKAGE</element>-->
-<!--                                    <limits>-->
-<!--                                        <limit>-->
-<!--                                            <counter>INSTRUCTION</counter>-->
-<!--                                            <value>COVEREDRATIO</value>-->
-<!--                                            <minimum>0.60</minimum>-->
-<!--                                        </limit>-->
-<!--                                        <limit>-->
-<!--                                            <counter>LINE</counter>-->
-<!--                                            <value>COVEREDRATIO</value>-->
-<!--                                            <minimum>0.60</minimum>-->
-<!--                                        </limit>-->
-<!--                                        <limit>-->
-<!--                                            <counter>BRANCH</counter>-->
-<!--                                            <value>COVEREDRATIO</value>-->
-<!--                                            <minimum>0.60</minimum>-->
-<!--                                        </limit>-->
-<!--                                    </limits>-->
-<!--                                </rule>-->
-<!--                            </rules>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
+                    <!-- Check code coverage -->
+                    <execution>
+                        <id>check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <phase>integration-test</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Maven Failsafe Plugin for Running Integration Tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.2.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

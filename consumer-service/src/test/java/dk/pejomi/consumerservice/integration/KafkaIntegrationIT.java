@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
 @ComponentScan(basePackages = "dk.pejomi.orderservice")
 @Disabled
-public class KafkaIntegrationTest {
+public class KafkaIntegrationIT {
 
     @Autowired
     private OrderConsumer consumer;
