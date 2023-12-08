@@ -3,7 +3,6 @@ package dk.pejomi.menuservice.repository;
 import dk.pejomi.menuservice.model.Menu;
 import dk.pejomi.menuservice.model.MenuItem;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-class MenuRepositoryTest {
+class MenuRepositoryIT {
 
     @Autowired
     private MenuRepository menuRepository;

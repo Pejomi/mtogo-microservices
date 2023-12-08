@@ -1,6 +1,6 @@
 package dk.pejomi.orderservice.controller;
 
-import dk.pejomi.basedomain.dto.OrderDto;
+import dk.pejomi.orderservice.dto.OrderDto;
 import dk.pejomi.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

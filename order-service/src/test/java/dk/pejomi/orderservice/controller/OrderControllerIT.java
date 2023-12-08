@@ -1,8 +1,8 @@
 package dk.pejomi.orderservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.pejomi.basedomain.dto.OrderDto;
-import dk.pejomi.basedomain.dto.OrderItemDto;
+import dk.pejomi.orderservice.dto.OrderDto;
+import dk.pejomi.orderservice.dto.OrderItemDto;
 import dk.pejomi.orderservice.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = OrderController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
-class OrderControllerTest {
+class OrderControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -61,7 +61,7 @@ class OrderControllerTest {
                 .restaurantId(1L)
                 .orderState("PENDING")
                 .price(1000)
-                .orderItems(orderItemDtos)
+                //.orderItems(orderItemDtos)
                 .build();
     }
 

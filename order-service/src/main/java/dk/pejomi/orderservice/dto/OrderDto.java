@@ -1,4 +1,4 @@
-package dk.pejomi.basedomain.dto;
+package dk.pejomi.orderservice.dto;
 
 
 import lombok.AllArgsConstructor;

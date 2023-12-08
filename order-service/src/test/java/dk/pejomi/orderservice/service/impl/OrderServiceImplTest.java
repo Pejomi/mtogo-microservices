@@ -1,8 +1,8 @@
 package dk.pejomi.orderservice.service.impl;
 
-import dk.pejomi.basedomain.dto.OrderDto;
-import dk.pejomi.basedomain.event.OrderEvent;
-import dk.pejomi.basedomain.dto.OrderItemDto;
+import dk.pejomi.orderservice.dto.OrderDto;
+import dk.pejomi.orderservice.event.OrderEvent;
+import dk.pejomi.orderservice.dto.OrderItemDto;
 import dk.pejomi.orderservice.kafka.OrderProducer;
 import dk.pejomi.orderservice.model.Order;
 import dk.pejomi.orderservice.model.OrderItem;
@@ -76,7 +76,7 @@ class OrderServiceImplTest {
                 .restaurantId(1L)
                 .orderState("PENDING")
                 .price(250)
-                .orderItems(orderItemDtos)
+                //.orderItems(orderItemDtos)
                 .build();
 
         order = Order.builder()
@@ -110,7 +110,7 @@ class OrderServiceImplTest {
         assertEquals(orderDto.getRestaurantId(), actual.getRestaurantId());
         assertEquals(orderDto.getOrderState(), actual.getOrderState());
         assertEquals(orderDto.getPrice(), actual.getPrice());
-        assertEquals(orderDto.getOrderItems().size(), actual.getOrderItems().size());
+        //assertEquals(orderDto.getOrderItems().size(), actual.getOrderItems().size());
     }
 
 

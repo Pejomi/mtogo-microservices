@@ -1,6 +1,6 @@
 package dk.pejomi.orderservice.kafka;
 
-import dk.pejomi.basedomain.event.OrderEvent;
+import dk.pejomi.orderservice.event.OrderEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
