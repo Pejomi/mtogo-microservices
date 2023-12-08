@@ -1,6 +1,5 @@
 package dk.pejomi.orderservice.service;
-
-import dk.pejomi.basedomain.dto.OrderDto;
+import dk.pejomi.orderservice.dto.OrderDto;
 
 public interface OrderService {
 

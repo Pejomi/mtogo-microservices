@@ -1,9 +1,10 @@
 package dk.pejomi.orderservice.service.impl;
 
-import dk.pejomi.basedomain.dto.OrderDto;
-import dk.pejomi.basedomain.event.OrderEvent;
-import dk.pejomi.basedomain.dto.OrderItemDto;
+import dk.pejomi.orderservice.dto.OrderDto;
+import dk.pejomi.orderservice.event.OrderEvent;
+import dk.pejomi.orderservice.dto.OrderItemDto;
 import dk.pejomi.orderservice.kafka.OrderProducer;
+import dk.pejomi.orderservice.mapper.OrderMapper;
 import dk.pejomi.orderservice.model.Order;
 import dk.pejomi.orderservice.model.OrderItem;
 import dk.pejomi.orderservice.repository.OrderRepository;
@@ -25,9 +26,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderDto createOrder(OrderDto orderDto) {
-        Order order = orderRepository.save(
-//                OrderMapper.INSTANCE.toOrder(orderDto));
-                mapOrderDtoToOrder(orderDto));
+        Order order = orderRepository.save(OrderMapper.INSTANCE.orderDtoToOrder(orderDto));
+
 
         // Kafka event
         OrderEvent orderEvent = new OrderEvent();
@@ -36,10 +36,9 @@ public class OrderServiceImpl implements OrderService {
         orderEvent.setOrderDto(orderDto);
         orderProducer.sendMessage(orderEvent);
 
-        //return OrderMapper.INSTANCE.toOrderDTO(order);
-        return mapOrderToOrderDto(order);
+        return OrderMapper.INSTANCE.orderToOrderDto(order);
     }
-
+/*
     private Order mapOrderDtoToOrder(OrderDto orderDto) {
         Order order = new Order();
         order.setId(orderDto.getId());
@@ -100,4 +99,6 @@ public class OrderServiceImpl implements OrderService {
 
         return orderItemDto;
     }
+
+ */
 }

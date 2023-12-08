@@ -1,18 +1,28 @@
 package dk.pejomi.orderservice.mapper;
 
-import dk.pejomi.basedomain.dto.OrderDto;
+import dk.pejomi.orderservice.dto.OrderDto;
+import dk.pejomi.orderservice.dto.OrderItemDto;
 import dk.pejomi.orderservice.model.Order;
+import dk.pejomi.orderservice.model.OrderItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface OrderMapper {
-    OrderMapper INSTANCE = Mappers.getMapper( OrderMapper.class );
+    OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 
-//    @Mapping(target = "orderItems", ignore = true)
-    Order toOrder(OrderDto orderDto);
+    @Mapping(source = "orderItems", target = "orderItemsDto")
+    OrderDto orderToOrderDto(Order order);
 
 
-    OrderDto toOrderDTO(Order order);
+    @Mapping(source = "orderItemsDto", target = "orderItems")
+    Order orderDtoToOrder(OrderDto orderDto);
+
+    OrderItemDto orderItemToOrderItemDto(OrderItem orderItem);
+
+    @Mapping(target = "order", ignore = true)
+    OrderItem orderItemDtoToOrderItem(OrderItemDto orderItemDto);
+
+
 }

@@ -1,6 +1,6 @@
 package dk.pejomi.consumerservice.integration;
 
-import dk.pejomi.basedomain.event.OrderEvent;
+import dk.pejomi.orderservice.event.OrderEvent;
 import dk.pejomi.consumerservice.ConsumerServiceApplication;
 import dk.pejomi.orderservice.OrderServiceApplication;
 import org.junit.jupiter.api.Disabled;
