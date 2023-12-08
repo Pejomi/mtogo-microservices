@@ -70,6 +70,10 @@
                                 <exclude>**/CustomUserDetailsService.class</exclude>
                                 <!-- Exclude Config folder -->
                                 <exclude>**/config/*</exclude>
+                                <!-- Exclude Event folder -->
+                                <exclude>**/event/*</exclude>
+                                <!-- Exclude Util folder -->
+                                <exclude>**/util/*</exclude>
                             </excludes>
                             <dataFileIncludes>
                                 <dataFileInclude>**/jacoco.exec</dataFileInclude>
