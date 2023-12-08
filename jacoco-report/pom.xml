@@ -58,21 +58,13 @@
                         </goals>
                         <configuration>
                             <excludes>
-                                <!-- Exclude main class -->
                                 <exclude>**/*ServiceApplication.class</exclude>
-                                <!-- Exclude model classes -->
                                 <exclude>**/model/*</exclude>
-                                <!-- Exclude Mapper classes -->
                                 <exclude>**/mapper/*</exclude>
-                                <!-- Exclude dto classes -->
                                 <exclude>**/dto/*</exclude>
-                                <!-- Exclude CustomUserDetails -->
                                 <exclude>**/CustomUserDetailsService.class</exclude>
-                                <!-- Exclude Config folder -->
                                 <exclude>**/config/*</exclude>
-                                <!-- Exclude Event folder -->
                                 <exclude>**/event/*</exclude>
-                                <!-- Exclude Util folder -->
                                 <exclude>**/util/*</exclude>
                             </excludes>
                             <dataFileIncludes>
@@ -87,5 +79,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

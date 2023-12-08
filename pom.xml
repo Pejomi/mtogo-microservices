@@ -125,11 +125,8 @@
                 <version>0.8.10</version>
                 <configuration>
                     <excludes>
-                        <!-- Exclude main class -->
                         <exclude>**/*ServiceApplication.class</exclude>
-                        <!-- Exclude model classes -->
                         <exclude>**/model/*</exclude>
-                        <!-- Exclude Mapper classes -->
                         <exclude>**/mapper/*</exclude>
                         <!-- Exclude dto classes -->
                         <exclude>**/dto/*</exclude>
