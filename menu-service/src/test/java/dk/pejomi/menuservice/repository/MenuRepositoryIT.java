@@ -22,32 +22,6 @@ class MenuRepositoryIT {
     @Autowired
     private MenuItemRepository menuItemRepository;
 
-    @BeforeEach
-    void init() {
-        Menu menu = menuRepository.save(Menu.builder()
-                .restaurantId(1L)
-                .build());
-
-        MenuItem menuItem1 = MenuItem.builder()
-                .name("Pizza Margherita")
-                .price(50)
-                .menu(menu)
-                .build();
-        MenuItem menuItem2 = MenuItem.builder()
-                .name("Pizza Pepperoni")
-                .price(60)
-                .menu(menu)
-                .build();
-        menuItemRepository.save(menuItem1);
-        menuItemRepository.save(menuItem2);
-    }
-
-    @AfterEach
-    void tearDown() {
-        menuItemRepository.deleteAll();
-        menuRepository.deleteAll();
-    }
-
     @Test
     void should_find_menu_by_id() {
         // Arrange
@@ -109,12 +83,13 @@ class MenuRepositoryIT {
     void should_delete_menu_item() {
         // Arrange
         MenuItem menuItem = menuItemRepository.findAll().get(0);
+        int size = menuItemRepository.findAll().size();
 
         // Act
         menuItemRepository.deleteById(menuItem.getId());
 
         // Assert
-        assertEquals(menuItemRepository.findAll().size(), 1);
+        assertEquals(menuItemRepository.findAll().size(), size-1);
     }
 
 }

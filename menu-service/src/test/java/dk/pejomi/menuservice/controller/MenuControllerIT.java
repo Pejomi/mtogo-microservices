@@ -2,126 +2,158 @@ package dk.pejomi.menuservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.pejomi.menuservice.dto.MenuDto;
-import dk.pejomi.menuservice.service.MenuService;
-import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
+import dk.pejomi.menuservice.dto.MenuItemDto;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+@SpringBootTest
+@AutoConfigureMockMvc
+public class MenuControllerIT {
 
-@WebMvcTest(controllers = MenuController.class)
-@AutoConfigureMockMvc(addFilters = false)
-@ExtendWith(MockitoExtension.class)
-class MenuControllerIT {
+    private final MockMvc mockMvc;
+    private final String URL = "/api/menu";
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
-    private MenuService menuService;
+    public MenuControllerIT(MockMvc mockMvc) {
+        this.mockMvc = mockMvc;
+    }
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    private MenuDto menuDto;
+    @Test
+    void should_return_ok_when_getMenuById_given_valid_id() throws Exception {
+        // Arrange
+        Long id = 1L;
 
-    private List<MenuDto> menuDtoList;
+        // Act & Assert
+        mockMvc
+                .perform(MockMvcRequestBuilders.get(URL + "/" + id))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id));
+    }
 
-    @BeforeEach
-    public void init() {
-        menuDto = MenuDto.builder()
-                .restaurantId(1L)
+    @Test
+    void should_return_not_found_when_getMenuById_given_invalid_id() throws Exception {
+        // Arrange
+        Long id = 999L;
+
+        // Act & Assert
+        mockMvc
+                .perform(MockMvcRequestBuilders.get(URL +"/" + id))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void should_return_bad_request_when_getMenuById_given_invalid_id() throws Exception {
+        // Arrange
+        String id = "abc";
+
+        // Act & Assert
+        mockMvc
+                .perform(MockMvcRequestBuilders.get(URL + "/" + id))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void should_return_ok_when_getMenuByRestaurantId_given_valid_id() throws Exception {
+        // Arrange
+        Long id = 1L;
+
+        // Act & Assert
+        mockMvc
+                .perform(MockMvcRequestBuilders.get(URL + "/restaurant/" + id))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].restaurantId").value(id));
+    }
+
+    @Test
+    void should_return_not_found_when_getMenuByRestaurantId_given_invalid_id() throws Exception {
+        // Arrange
+        Long id = 999L;
+
+        // Act & Assert
+        mockMvc
+                .perform(MockMvcRequestBuilders.get(URL + "/restaurant/" + id))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void should_return_bad_request_when_getMenuByRestaurantId_given_invalid_id() throws Exception {
+        // Arrange
+        String id = "abc";
+
+        // Act & Assert
+        mockMvc
+                .perform(MockMvcRequestBuilders.get(URL + "/restaurant/" + id))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void should_return_ok_when_createMenu_given_valid_menu() throws Exception {
+        // Arrange
+        List<MenuItemDto> menuItemDtoList = List.of(MenuItemDto.builder()
+                .name("Cake")
+                .price(40.0)
+                .build());
+
+        Long restaurantId = 1L;
+
+        MenuDto menuDto = MenuDto.builder()
+                .restaurantId(restaurantId)
+                .menuItemsDto(menuItemDtoList)
                 .build();
 
-        MenuDto menuDto2 = MenuDto.builder()
-                .restaurantId(1L)
+        // Act & Assert
+        mockMvc
+                .perform(MockMvcRequestBuilders.post(URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(menuDto)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpectAll(
+                        MockMvcResultMatchers.jsonPath("$.restaurantId").value(restaurantId),
+                        MockMvcResultMatchers.jsonPath("$.menuItemsDto.[0].name").value("Cake"),
+                        MockMvcResultMatchers.jsonPath("$.menuItemsDto.[0].price").value(40.0)
+                );
+    }
+
+    @Test
+    void should_return_bad_request_when_createMenu_given_invalid_menu() throws Exception {
+        // Arrange
+        List<MenuItemDto> menuItemDtoList = List.of(MenuItemDto.builder()
+                .name("Cake")
+                .price(40.0)
+                .build());
+
+        Long restaurantId = 1L;
+
+        MenuDto menuDto = MenuDto.builder()
+                // no restaurantId set
+                .menuItemsDto(menuItemDtoList)
                 .build();
 
-        menuDtoList = List.of(menuDto, menuDto2);
+        // Act & Assert
+        mockMvc
+                .perform(MockMvcRequestBuilders.post(URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(menuDto)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
-
-    @Test
-    void should_return_ok_when_getMenuById() throws Exception {
-        when(menuService.getMenuById(any())).thenReturn(menuDto);
-
-        ResultActions resultActions = mockMvc.perform(get("/api/menu/1"));
-
-        resultActions.andExpect(status().isOk());
-
-        MenuDto actual = objectMapper.readValue(resultActions.andReturn().getResponse().getContentAsString(), MenuDto.class);
-
-        assertEquals(menuDto, actual);
-    }
-
-    @Test
-    void should_return_not_found_when_getMenuById() throws Exception {
-        when(menuService.getMenuById(any())).thenThrow(new EntityNotFoundException());
-
-        ResultActions resultActions = mockMvc.perform(get("/api/menu/1"));
-
-        resultActions.andExpect(status().isNotFound());
-    }
-
-    @Test
-    void should_return_ok_when_getMenuByRestaurantId() throws Exception {
-        when(menuService.getAllMenusByRestaurantId(any())).thenReturn(menuDtoList);
-
-        ResultActions resultActions = mockMvc.perform(get("/api/menu/restaurant/1"));
-
-        resultActions.andExpect(status().isOk());
-
-        List actual = objectMapper.readValue(resultActions.andReturn().getResponse().getContentAsString(), List.class);
-
-        assertEquals(menuDtoList.size(), actual.size());
-    }
-
-    @Test
-    void should_return_not_found_when_getMenuByRestaurantId() throws Exception {
-        when(menuService.getAllMenusByRestaurantId(any())).thenThrow(new EntityNotFoundException());
-
-        ResultActions resultActions = mockMvc.perform(get("/api/menu/restaurant/1"));
-
-        resultActions.andExpect(status().isNotFound());
-    }
-
-    @Test
-    void should_return_ok_when_createMenu() throws Exception {
-        when(menuService.createMenu(any())).thenReturn(menuDto);
-
-        ResultActions resultActions = mockMvc.perform(post("/api/menu")
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(menuDto)));
-
-        resultActions.andExpect(status().isOk());
-
-        MenuDto actual = objectMapper.readValue(resultActions.andReturn().getResponse().getContentAsString(), MenuDto.class);
-
-        assertEquals(menuDto, actual);
-    }
-
-    @Test
-    void should_return_bad_request_when_createMenu() throws Exception {
-        when(menuService.createMenu(any())).thenThrow(new RuntimeException());
-
-        ResultActions resultActions = mockMvc.perform(post("/api/menu")
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(menuDto)));
-
-        resultActions.andExpect(status().isBadRequest());
-    }
-
 }
