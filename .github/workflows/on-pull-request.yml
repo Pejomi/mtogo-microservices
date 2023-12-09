@@ -27,3 +27,6 @@ jobs:
 
       - name: Run Tests
         run: ./mvnw test
+
+      - name: Run Integration Tests
+        run: ./mvnw failsafe:integration-test
