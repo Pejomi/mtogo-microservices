@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/order")
 @RequiredArgsConstructor
 @Slf4j
-public class OrderController {
+public class OrderController implements OrderApi {
 
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderDto> placeOrder(@RequestBody OrderDto orderDto) {
+    public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
         try {
             return new ResponseEntity<>(orderService.createOrder(orderDto), HttpStatus.CREATED);
         } catch (RuntimeException e) {
