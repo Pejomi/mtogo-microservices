@@ -23,11 +23,21 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
 
+
     @Override
     @Transactional
     public OrderDto createOrder(OrderDto orderDto) {
+        orderDto.setOrderState("CREATED");
+        calculateTotalPrice(orderDto);
+
+        if (!checkTotalPriceMinimum(orderDto)) {
+            orderDto.setOrderState("REJECTED");
+            throw new RuntimeException("Order price is below minimum");
+        }
+        // Persist order items
         Order order = orderRepository.save(OrderMapper.INSTANCE.orderDtoToOrder(orderDto));
 
+        // TODO: Start a saga here to handle the order flow: payment, delivery, etc.
 
         // Kafka event
         OrderEvent orderEvent = new OrderEvent();
@@ -37,5 +47,15 @@ public class OrderServiceImpl implements OrderService {
         orderProducer.sendMessage(orderEvent);
 
         return OrderMapper.INSTANCE.orderToOrderDto(order);
+    }
+
+    private boolean checkTotalPriceMinimum(OrderDto orderDto) {
+        return orderDto.getPrice() >= 100;
+    }
+
+    private void calculateTotalPrice(OrderDto orderDto) {
+        orderDto.setPrice(orderDto.getOrderItemsDto().stream()
+                .mapToDouble(orderItemDto -> orderItemDto.getPrice() * orderItemDto.getQuantity())
+                .sum());
     }
 }
