@@ -18,7 +18,7 @@ import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
+@EmbeddedKafka(partitions = 1, brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
 class OrderControllerIT {
 
     private final MockMvc mockMvc;
@@ -30,25 +30,9 @@ class OrderControllerIT {
 
     @BeforeEach
     public void init() {
-        List<OrderItemDto> orderItemDtos = List.of(
-                OrderItemDto.builder()
-                        .menuItemId(1000L)
-                        .price(100)
-                        .quantity(2)
-                        .build(),
-                OrderItemDto.builder()
-                        .menuItemId(1001L)
-                        .price(50)
-                        .quantity(1)
-                        .build()
-        );
         orderDto = OrderDto.builder()
-                .id(1000L)
                 .consumerId(1L)
                 .restaurantId(1L)
-                .orderState("CREATED")
-                .price(1000)
-                .orderItemsDto(orderItemDtos)
                 .build();
     }
 
@@ -59,14 +43,46 @@ class OrderControllerIT {
 
     @Test
     void should_return_orderDto_when_creating_order() throws Exception {
-        // Perform the POST request
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/orders")
+        // Arrange
+        orderDto.setOrderItemsDto(List.of(
+                OrderItemDto.builder()
+                        .menuItemId(1000L)
+                        .price(90)
+                        .quantity(1)
+                        .build(),
+                OrderItemDto.builder()
+                        .menuItemId(1001L)
+                        .price(60)
+                        .quantity(1)
+                        .build()
+        ));
+
+        // Act & Assert
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/order")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(orderDto)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.restaurantId").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.orderState").value("CREATED"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(1000));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(150));
+    }
+
+    @Test
+    void should_return_bad_request_when_creating_order_with_price_below_minimum() throws Exception {
+        // Arrange
+        orderDto.setOrderItemsDto(List.of(
+                OrderItemDto.builder()
+                        .menuItemId(1000L)
+                        .price(90)
+                        .quantity(1)
+                        .build()
+        ));
+
+        // Act & Assert
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/order")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderDto)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
 }

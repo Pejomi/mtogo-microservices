@@ -34,14 +34,11 @@ class OrderServiceImplTest {
     private Order order;
     private OrderDto orderDto;
 
-    private List<OrderItem> orderItems;
-    private List<OrderItemDto> orderItemDtos;
-
     private OrderEvent orderEvent;
 
     @BeforeEach
     void setUp() {
-        orderItemDtos = List.of(
+        List<OrderItemDto> orderItemDtos = List.of(
                 OrderItemDto.builder()
                         .id(1L)
                         .menuItemId(1L)
@@ -56,7 +53,7 @@ class OrderServiceImplTest {
                         .build()
         );
 
-        orderItems = List.of(
+        List<OrderItem> orderItems = List.of(
                 OrderItem.builder()
                         .id(1L)
                         .menuItemId(1L)
@@ -74,16 +71,16 @@ class OrderServiceImplTest {
                 .id(1L)
                 .consumerId(1L)
                 .restaurantId(1L)
-                .orderState("PENDING")
+                .orderState("CREATED")
+                .orderItemsDto(orderItemDtos)
                 .price(250)
-                //.orderItems(orderItemDtos)
                 .build();
 
         order = Order.builder()
                 .id(1L)
                 .consumerId(1L)
                 .restaurantId(1L)
-                .orderState("PENDING")
+                .orderState("CREATED")
                 .price(250)
                 .orderItems(orderItems)
                 .build();
@@ -110,7 +107,25 @@ class OrderServiceImplTest {
         assertEquals(orderDto.getRestaurantId(), actual.getRestaurantId());
         assertEquals(orderDto.getOrderState(), actual.getOrderState());
         assertEquals(orderDto.getPrice(), actual.getPrice());
-        //assertEquals(orderDto.getOrderItems().size(), actual.getOrderItems().size());
+        assertEquals(orderDto.getOrderItemsDto().size(), actual.getOrderItemsDto().size());
+    }
+
+    @Test
+    void should_throw_exception_when_order_price_is_below_minimum() {
+        // Arrange
+        orderDto.setOrderItemsDto(List.of(
+                OrderItemDto.builder()
+                        .menuItemId(1000L)
+                        .price(90)
+                        .quantity(1)
+                        .build()
+        ));
+
+        // when
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> orderService.createOrder(orderDto));
+
+        // then
+        assertEquals("Order price is below minimum", exception.getMessage());
     }
 
 
