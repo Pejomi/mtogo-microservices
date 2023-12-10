@@ -1,23 +1,20 @@
-package dk.pejomi.consumerservice.kafka;
+package dk.pejomi.restaurantservice.kafka;
 
-import dk.pejomi.basedomain.dto.ConsumerDto;
-import dk.pejomi.basedomain.event.CreateConsumerEvent;
-import dk.pejomi.consumerservice.service.ConsumerService;
+import dk.pejomi.basedomain.dto.RestaurantDto;
+import dk.pejomi.basedomain.event.CreateRestaurantEvent;
+import dk.pejomi.restaurantservice.service.RestaurantService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-
-
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 class UserConsumerTest {
 
-
     @Mock
-    private ConsumerService consumerService;
+    private RestaurantService restaurantService;
 
     @InjectMocks
     private UserConsumer userConsumer;
@@ -30,23 +27,24 @@ class UserConsumerTest {
     @Test
     void testConsume() {
         // Arrange
-        ConsumerDto consumerDto = ConsumerDto.builder()
-                .phone("12345678")
+        RestaurantDto restaurantDto = RestaurantDto.builder()
+                .name("test name")
                 .street("test street")
                 .city("test city")
                 .zipCode("1234")
                 .country("test country")
                 .build();
 
-        CreateConsumerEvent testEvent = CreateConsumerEvent.builder()
+        CreateRestaurantEvent testEvent = CreateRestaurantEvent.builder()
                 .message("test message")
-                .consumerDTO(consumerDto)
+                .restaurantDto(restaurantDto)
                 .build();
 
         // Act
         userConsumer.consume(testEvent);
 
         // Assert
-        verify(consumerService).createConsumer(testEvent.getConsumerDTO());
+        verify(restaurantService).createRestaurant(testEvent.getRestaurantDto());
     }
+
 }
