@@ -23,4 +23,12 @@ public class ConsumerServiceImpl implements ConsumerService {
         return ConsumerMapper.INSTANCE.toConsumerDTO(consumer);
     }
 
+    @Override
+    public int increaseOrderCount(Long id) {
+        Consumer consumer = consumerRepository.findById(id).orElseThrow();
+        consumer.setOrderCount(consumer.getOrderCount() + 1);
+        consumer = consumerRepository.save(consumer);
+        return consumer.getOrderCount();
+    }
+
 }
