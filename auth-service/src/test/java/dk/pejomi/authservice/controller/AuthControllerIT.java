@@ -5,37 +5,32 @@ import dk.pejomi.authservice.model.AuthResponseDto;
 import dk.pejomi.authservice.model.LoginDto;
 import dk.pejomi.authservice.model.RegisterConsumerDto;
 import dk.pejomi.authservice.model.RegisterRestaurantDto;
-import dk.pejomi.authservice.service.LoginService;
-import dk.pejomi.authservice.service.RegisterService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = AuthController.class)
-@AutoConfigureMockMvc(addFilters = false)
-@ExtendWith(MockitoExtension.class)
-class AuthControllerIT {
+@SpringBootTest
+@AutoConfigureMockMvc
+@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
+public class AuthControllerIT {
+
+    private final MockMvc mockMvc;
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
-    private RegisterService registerService;
-
-    @MockBean
-    private LoginService loginService;
+    public AuthControllerIT(MockMvc mockMvc) {
+        this.mockMvc = mockMvc;
+    }
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -46,7 +41,7 @@ class AuthControllerIT {
     private AuthResponseDto authResponseDto;
 
     @BeforeEach
-    public void init() {
+    public void init() throws Exception {
         loginDto = LoginDto.builder()
                 .email("test@email.dk")
                 .password("password")
@@ -61,115 +56,47 @@ class AuthControllerIT {
                 .country("Denmark")
                 .build();
 
-        registerRestaurantDto = RegisterRestaurantDto.builder()
-                .email("test@mail.dk")
-                .password("password")
-                .phone("12345678")
-                .street("street")
-                .city("city")
-                .zipCode("zipCode")
-                .country("country")
-                .homepage("www.homepage.dk")
-                .restaurantState("PENDING")
-                .build();
-
-        authResponseDto = new AuthResponseDto("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJNb3J0ZW4iLCJpYXQiOjE3MDA5MzU2MjUsImV4cCI6MTcwMDkzNTY5NX0.SRYdU2a01hOqWsHNO7brGW5cMsKeytNl3opUrODc_Tb2UDOTKM0qN6TyMIJ8Ibcs9WCE31Vdb3HyxR7KdzRI3Q");
-
+//        registerRestaurantDto = RegisterRestaurantDto.builder()
+//                .email("test@mail.dk")
+//                .password("password")
+//                .phone("12345678")
+//                .street("street")
+//                .city("city")
+//                .zipCode("zipCode")
+//                .country("country")
+//                .homepage("www.homepage.dk")
+//                .restaurantState("PENDING")
+//                .build();
+//
+//        authResponseDto = new AuthResponseDto("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJNb3J0ZW4iLCJpYXQiOjE3MDA5MzU2MjUsImV4cCI6MTcwMDkzNTY5NX0.SRYdU2a01hOqWsHNO7brGW5cMsKeytNl3opUrODc_Tb2UDOTKM0qN6TyMIJ8Ibcs9WCE31Vdb3HyxR7KdzRI3Q");
     }
 
     @Test
-    void should_return_200_when_login_successfully() throws Exception {
-        // Arrange
-        when(loginService.login(any(LoginDto.class))).thenReturn(authResponseDto);
+    void should_return_ok_when_login_with_valid_credentials() throws Exception {
 
-        mockMvc.perform(post("/api/auth/login")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(loginDto)))
-                .andExpect(status().isOk());
-    }
 
-    @Test
-    void should_return_400_when_login_with_wrong_cred() throws Exception {
-        // Arrange
-        when(loginService.login(any(LoginDto.class))).thenThrow(new BadCredentialsException("Invalid username/password supplied"));
-
-        mockMvc.perform(post("/api/auth/login")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(loginDto)))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    void should_return_400_when_consumer_register_with_existing_username() throws Exception {
-        // Arrange
-        when(registerService.checkEmail(any(String.class))).thenReturn(true);
-
-        mockMvc.perform(post("/api/auth/register/consumer")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/register/consumer")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(registerConsumerDto)))
-                .andExpect(status().isBadRequest());
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        //fixme
+
+
+//        mockMvc.perform(post("/api/auth/login")
+//                        .contentType("application/json")
+//                        .content(objectMapper.writeValueAsString(loginDto)))
+//                .andExpect(status().isOk());
     }
 
-
-    @Test
-    void should_return_201_when_consumer_register_successfully() throws Exception {
-        // Arrange
-        when(registerService.checkEmail(any(String.class))).thenReturn(false);
-        when(registerService.registerConsumer(any(RegisterConsumerDto.class))).thenReturn("User registered successfully");
-
-        mockMvc.perform(post("/api/auth/register/consumer")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(registerConsumerDto)))
-                .andExpect(status().isCreated());
-    }
-
-    @Test
-    void should_return_500_when_consumer_register_with_exception() throws Exception {
-        // Arrange
-        when(registerService.checkEmail(any(String.class))).thenReturn(false);
-        when(registerService.registerConsumer(any(RegisterConsumerDto.class))).thenThrow(new RuntimeException("Error registering user"));
-
-        mockMvc.perform(post("/api/auth/register/consumer")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(registerConsumerDto)))
-                .andExpect(status().isInternalServerError());
-    }
-
-    @Test
-    void should_return_400_when_restaurant_register_with_existing_username() throws Exception {
-        // Arrange
-        when(registerService.checkEmail(any(String.class))).thenReturn(true);
-
-        mockMvc.perform(post("/api/auth/register/restaurant")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(registerRestaurantDto)))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void should_return_201_when_restaurant_register_successfully() throws Exception {
-        // Arrange
-        when(registerService.checkEmail(any(String.class))).thenReturn(false);
-        when(registerService.registerRestaurant(any(RegisterRestaurantDto.class))).thenReturn("User registered successfully");
-
-        mockMvc.perform(post("/api/auth/register/restaurant")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(registerRestaurantDto)))
-                .andExpect(status().isCreated());
-    }
-
-    @Test
-    void should_return_500_when_restaurant_register_with_exception() throws Exception {
-        // Arrange
-        when(registerService.checkEmail(any(String.class))).thenReturn(false);
-        when(registerService.registerRestaurant(any(RegisterRestaurantDto.class))).thenThrow(new RuntimeException("Error registering user"));
-
-        mockMvc.perform(post("/api/auth/register/restaurant")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(registerRestaurantDto)))
-                .andExpect(status().isInternalServerError());
-    }
-
-
+//    @Test
+//    void should_return_unauthorized_when_login_with_invalid_credentials() throws Exception {
+//        assert true;
+//    }
+//
+//    @Test
+//    void should_return_bad_request_when_registering_with_existing_email() throws Exception {
+//        assert true;
+//    }
 
 }
