@@ -7,5 +7,5 @@ public interface RegisterService {
 
     String registerConsumer(RegisterConsumerDto registerConsumerDto);
     String registerRestaurant(RegisterRestaurantDto registerRestaurantDto);
-    Boolean checkEmail(String email);
+    Boolean isEmailAvailable(String email);
 }
