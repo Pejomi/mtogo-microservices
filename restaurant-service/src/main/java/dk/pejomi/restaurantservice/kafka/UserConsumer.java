@@ -14,8 +14,10 @@ public class UserConsumer {
 
     private final RestaurantService restaurantService;
 
-    @KafkaListener(topics = "create_restaurant_topics", groupId = "${spring.kafka.consumer.group-id}")
-    public void consume(CreateRestaurantEvent event){
+    @KafkaListener(
+            topics = "create_restaurant_topics",
+            groupId = "${spring.kafka.consumer.group-id}")
+    public void consume(CreateRestaurantEvent event) {
         log.info(String.format("Message received => %s%n", event.toString()));
 
         restaurantService.createRestaurant(event.getRestaurantDto());

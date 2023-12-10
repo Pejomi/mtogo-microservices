@@ -124,6 +124,22 @@ class RegisterServiceImplTest {
         assertEquals("", actual);
     }
 
+    @Test
+    void should_not_register_consumer_when_register_consumer_is_called_with_invalid_role() {
+        // Arrange
+        when(roleRepository.findByName(Mockito.anyString())).thenReturn(java.util.Optional.empty());
+        String actual = "";
+
+        // Act
+        try {
+            registerService.registerConsumer(registerConsumerDto);
+        } catch (Exception e) {
+            actual = e.getMessage();
+        }
+        // Assert
+        assertEquals("User role not found", actual);
+    }
+
 
     // Restaurant tests
     @Test
@@ -156,6 +172,46 @@ class RegisterServiceImplTest {
             assertEquals("Error registering user", e.getMessage());
         }
         assertEquals("", actual);
+    }
+
+    @Test
+    void should_not_register_restaurant_when_register_restaurant_is_called_with_invalid_role() {
+        // Arrange
+        when(roleRepository.findByName(Mockito.anyString())).thenReturn(java.util.Optional.empty());
+        String actual = "";
+
+        // Act
+        try {
+            registerService.registerRestaurant(registerRestaurantDto);
+        } catch (Exception e) {
+            actual = e.getMessage();
+        }
+        // Assert
+        assertEquals("User role not found", actual);
+    }
+
+    @Test
+    void should_return_true_when_email_is_available() {
+        // Arrange
+        when(userRepository.existsByEmail(Mockito.anyString())).thenReturn(false);
+
+        // Act
+        Boolean actual = registerService.isEmailAvailable(user.getEmail());
+
+        // Assert
+        assertEquals(true, actual);
+    }
+
+    @Test
+    void should_return_false_when_email_is_not_available() {
+        // Arrange
+        when(userRepository.existsByEmail(Mockito.anyString())).thenReturn(true);
+
+        // Act
+        Boolean actual = registerService.isEmailAvailable(user.getEmail());
+
+        // Assert
+        assertEquals(false, actual);
     }
 
 

@@ -27,4 +27,6 @@ public class Consumer {
     private String zipCode;
     @Column(nullable = false)
     private String country;
+    @Column(nullable = false)
+    private int orderCount = 0;
 }

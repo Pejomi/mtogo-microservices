@@ -44,6 +44,7 @@ class ConsumerServiceImplTest {
                 .country("Denmark")
                 .street("Street 1")
                 .zipCode("1234")
+                .orderCount(0)
                 .build();
     }
 
@@ -58,4 +59,19 @@ class ConsumerServiceImplTest {
         //Assert
         assertEquals(consumerDTO.toString(), actual.toString());
     }
+
+    @Test
+    void should_increment_order_count_when_consuming_order_event() {
+        //Arrange
+        when(consumerRepository.findById(any(Long.class))).thenReturn(java.util.Optional.ofNullable(consumer));
+        when(consumerRepository.save(any(Consumer.class))).thenReturn(consumer);
+
+        //Act
+        int actual = consumerService.increaseOrderCount(1L);
+
+        //Assert
+        assertEquals(1, actual);
+    }
+
+
 }

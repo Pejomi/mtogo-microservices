@@ -23,7 +23,7 @@ public class Order {
     private String orderState;
     @Column(nullable = false, scale = 2, length = 100000)
     private double price;
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
     
 

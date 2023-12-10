@@ -4,4 +4,6 @@ import dk.pejomi.basedomain.dto.ConsumerDto;
 
 public interface ConsumerService {
     ConsumerDto createConsumer(ConsumerDto consumerDTO);
+    int increaseOrderCount(Long id);
+
 }
