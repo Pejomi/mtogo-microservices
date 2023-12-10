@@ -21,6 +21,5 @@ public class OrderItem {
     private int quantity;
     @ManyToOne
     @JoinColumn(name = "order_id")
-    @ToString.Exclude
     private Order order;
 }
