@@ -22,19 +22,15 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceImplTest {
-
     @Mock
     private OrderRepository orderRepository;
     @Mock
     private OrderProducer orderProducer;
-
     @InjectMocks
     private OrderServiceImpl orderService;
 
     private Order order;
     private OrderDto orderDto;
-
-    private OrderEvent orderEvent;
 
     @BeforeEach
     void setUp() {
@@ -84,30 +80,19 @@ class OrderServiceImplTest {
                 .price(250)
                 .orderItems(orderItems)
                 .build();
-
-        orderEvent = OrderEvent.builder()
-                .message("order status is in pending state")
-                .status("PENDING")
-                .orderDto(orderDto)
-                .build();
     }
 
     @Test
     void should_return_orderDto_when_order_is_created() throws Exception {
         // Arrange
-        when(orderRepository.save(Mockito.any(Order.class))).thenReturn(order);
-        when(orderProducer.sendMessage(Mockito.any(OrderEvent.class))).thenReturn(orderEvent);
-
-        // when
+        when(orderRepository.save(Mockito.any(Order.class)))
+                .thenReturn(order);
+        when(orderProducer.sendMessage(Mockito.any(OrderEvent.class)))
+                .thenReturn(new OrderEvent());
+        // Act
         OrderDto actual = orderService.createOrder(orderDto);
-
-        // then
-        assertEquals(orderDto.getId(), actual.getId());
-        assertEquals(orderDto.getConsumerId(), actual.getConsumerId());
-        assertEquals(orderDto.getRestaurantId(), actual.getRestaurantId());
-        assertEquals(orderDto.getOrderState(), actual.getOrderState());
-        assertEquals(orderDto.getPrice(), actual.getPrice());
-        assertEquals(orderDto.getOrderItemsDto().size(), actual.getOrderItemsDto().size());
+        // Assert
+        assertEquals(orderDto, actual);
     }
 
     @Test
@@ -120,11 +105,10 @@ class OrderServiceImplTest {
                         .quantity(1)
                         .build()
         ));
-
-        // when
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> orderService.createOrder(orderDto));
-
-        // then
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class, () -> orderService.createOrder(orderDto));
+        // Assert
         assertEquals("Order price is below minimum", exception.getMessage());
     }
 
