@@ -114,8 +114,8 @@ public class RegisterServiceImpl implements RegisterService {
 
 
     @Override
-    public Boolean checkEmail(String email) {
-        return userRepository.existsByEmail(email);
+    public Boolean isEmailAvailable(String email) {
+        return !userRepository.existsByEmail(email);
     }
 
 }

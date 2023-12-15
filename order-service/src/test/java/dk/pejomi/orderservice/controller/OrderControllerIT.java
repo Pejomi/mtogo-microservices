@@ -3,81 +3,86 @@ package dk.pejomi.orderservice.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.pejomi.orderservice.dto.OrderDto;
 import dk.pejomi.orderservice.dto.OrderItemDto;
-import dk.pejomi.orderservice.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-@WebMvcTest(controllers = OrderController.class)
-@AutoConfigureMockMvc(addFilters = false)
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@EmbeddedKafka(partitions = 1, brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
 class OrderControllerIT {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
-    private OrderService orderService;
+    private final MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     private OrderDto orderDto;
-    private List<OrderItemDto> orderItemDtos;
 
     @BeforeEach
     public void init() {
-        orderItemDtos = List.of(
-                OrderItemDto.builder()
-                        .menuItemId(1L)
-                        .price(100)
-                        .quantity(2)
-                        .build(),
-                OrderItemDto.builder()
-                        .menuItemId(2L)
-                        .price(50)
-                        .quantity(1)
-                        .build()
-        );
-
-
         orderDto = OrderDto.builder()
                 .consumerId(1L)
                 .restaurantId(1L)
-                .orderState("PENDING")
-                .price(1000)
-                //.orderItems(orderItemDtos)
                 .build();
+    }
+
+    @Autowired
+    public OrderControllerIT(MockMvc mockMvc) {
+        this.mockMvc = mockMvc;
     }
 
     @Test
     void should_return_orderDto_when_creating_order() throws Exception {
         // Arrange
-        when(orderService.createOrder(orderDto)).thenReturn(orderDto);
+        orderDto.setOrderItemsDto(List.of(
+                OrderItemDto.builder()
+                        .menuItemId(1000L)
+                        .price(90)
+                        .quantity(1)
+                        .build(),
+                OrderItemDto.builder()
+                        .menuItemId(1001L)
+                        .price(60)
+                        .quantity(1)
+                        .build()
+        ));
 
-        // Act
-        ResultActions response = mockMvc.perform(post("/api/orders")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(orderDto)));
+        // Act & Assert
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/order")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderDto)))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.restaurantId").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.orderState").value("CREATED"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(150));
+    }
 
-        // Assert
-        response.andExpect(status().isCreated())
-                .andExpect(result -> assertEquals(orderDto, objectMapper.readValue(result.getResponse().getContentAsString(), OrderDto.class)));
+    @Test
+    void should_return_bad_request_when_creating_order_with_price_below_minimum() throws Exception {
+        // Arrange
+        orderDto.setOrderItemsDto(List.of(
+                OrderItemDto.builder()
+                        .menuItemId(1000L)
+                        .price(90)
+                        .quantity(1)
+                        .build()
+        ));
+
+        // Act & Assert
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/order")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderDto)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
 }

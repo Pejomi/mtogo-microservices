@@ -19,6 +19,7 @@ public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private Long restaurantId;
     @OneToMany(mappedBy = "menu",cascade = CascadeType.ALL)
     private List<MenuItem> menuItems;

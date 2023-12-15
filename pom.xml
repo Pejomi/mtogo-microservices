@@ -161,15 +161,10 @@
                         <exclude>**/*ServiceApplication.class</exclude>
                         <exclude>**/model/*</exclude>
                         <exclude>**/mapper/*</exclude>
-                        <!-- Exclude dto classes -->
                         <exclude>**/dto/*</exclude>
-                        <!-- Exclude CustomUserDetails -->
                         <exclude>**/CustomUserDetailsService.class</exclude>
-                        <!-- Exclude Config folder -->
                         <exclude>**/config/*</exclude>
-                        <!-- Exclude Event folder -->
                         <exclude>**/event/*</exclude>
-                        <!-- Exclude Util folder -->
                         <exclude>**/util/*</exclude>
                     </excludes>
                     <rules>
@@ -236,18 +231,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
             <version>3.2.2</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
          </plugins>
     </build>

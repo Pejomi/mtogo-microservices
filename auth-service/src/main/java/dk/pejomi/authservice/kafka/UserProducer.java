@@ -2,6 +2,7 @@ package dk.pejomi.authservice.kafka;
 
 import dk.pejomi.basedomain.event.CreateConsumerEvent;
 import dk.pejomi.basedomain.event.CreateRestaurantEvent;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +14,9 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class UserProducer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserProducer.class);
 
     @Value("${spring.kafka.consumer_topic.name}")
     private String consumerTopicName;
@@ -23,15 +24,14 @@ public class UserProducer {
     @Value("${spring.kafka.restaurant_topic.name}")
     private String restaurantTopicName;
 
-    private KafkaTemplate<String, CreateConsumerEvent> kafkaTemplate;
+    private final KafkaTemplate<String, CreateConsumerEvent> kafkaTemplate;
 
     public UserProducer(KafkaTemplate<String, CreateConsumerEvent> kafkaTemplate) {
-//        this.topic = topic;
         this.kafkaTemplate = kafkaTemplate;
     }
 
     public CreateConsumerEvent sendCreateConsumer(CreateConsumerEvent event){
-        LOGGER.info(String.format("Order event => %s", event.toString()));
+        log.info(String.format("Order event => %s", event.toString()));
 
         // create Message
         Message<CreateConsumerEvent> message = MessageBuilder
@@ -44,7 +44,7 @@ public class UserProducer {
     }
 
     public CreateRestaurantEvent sendCreateRestaurant(CreateRestaurantEvent event){
-        LOGGER.info(String.format("Order event => %s", event.toString()));
+        log.info(String.format("Order event => %s", event.toString()));
 
         // create Message
         Message<CreateRestaurantEvent> message = MessageBuilder

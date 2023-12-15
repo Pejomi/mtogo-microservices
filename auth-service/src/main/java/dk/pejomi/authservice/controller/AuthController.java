@@ -43,7 +43,7 @@ public class AuthController {
     @PostMapping("/register/consumer")
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<String> registerConsumer(@RequestBody RegisterConsumerDto registerConsumerDto) {
-        if (registerService.checkEmail(registerConsumerDto.getEmail())) {
+        if (!registerService.isEmailAvailable(registerConsumerDto.getEmail())) {
             return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
         }
 
@@ -58,7 +58,7 @@ public class AuthController {
     @PostMapping("/register/restaurant")
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<String> registerRestaurant(@RequestBody RegisterRestaurantDto registerRestaurantDto) {
-        if (registerService.checkEmail(registerRestaurantDto.getEmail())) {
+        if (!registerService.isEmailAvailable(registerRestaurantDto.getEmail())) {
             return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
         }
         try {
