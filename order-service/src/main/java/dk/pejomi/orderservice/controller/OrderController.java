@@ -17,6 +17,7 @@ public class OrderController implements OrderApi {
     private final OrderService orderService;
 
     @PostMapping
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
         try {
             return new ResponseEntity<>(orderService.createOrder(orderDto), HttpStatus.CREATED);
