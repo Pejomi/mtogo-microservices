@@ -73,6 +73,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>au.com.dius.pact.provider</groupId>
+            <artifactId>junit5</artifactId>
+            <version>4.2.10</version>
+        </dependency>
+        <dependency>
             <groupId>dk.pejomi</groupId>
             <artifactId>base-domain</artifactId>
         </dependency>
@@ -86,6 +91,23 @@
             <version>2.2.15</version>
             <scope>compile</scope>
         </dependency>
+        <!--    Contract testing    -->
+        <dependency>
+            <groupId>au.com.dius</groupId>
+            <artifactId>pact-jvm-provider-junit5</artifactId>
+            <version>4.0.10</version>
+        </dependency>
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>4.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>au.com.dius.pact.provider</groupId>
+            <artifactId>junit5spring</artifactId>
+            <version>4.1.17</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -98,6 +120,21 @@
                     <to>
                         <image>${docker.username}/${project.artifactId}:latest</image>
                     </to>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>au.com.dius.pact.provider</groupId>
+                <artifactId>maven</artifactId>
+                <version>4.2.2</version>
+                <configuration>
+                    <pactBrokerUrl>http://localhost:9292</pactBrokerUrl>
+                    <pactBrokerUsername>pact_workshop</pactBrokerUsername>
+                    <pactBrokerPassword>pact_workshop</pactBrokerPassword>
+                    <tags>
+                        <tag>prod</tag>
+                        <tag>test</tag>
+                    </tags>
                 </configuration>
             </plugin>
         </plugins>
