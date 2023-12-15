@@ -58,6 +58,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>au.com.dius.pact.consumer</groupId>
+            <artifactId>junit5</artifactId>
+            <version>4.2.10</version>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>2.1.214</version>
@@ -74,6 +79,13 @@
             <groupId>dk.pejomi</groupId>
             <artifactId>base-domain</artifactId>
         </dependency>
+        <!-- Contract testing -->
+        <dependency>
+            <groupId>au.com.dius</groupId>
+            <artifactId>pact-jvm-consumer-junit5</artifactId>
+            <version>4.0.9</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -86,6 +98,16 @@
                     <to>
                         <image>${docker.username}/${project.artifactId}:latest</image>
                     </to>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>au.com.dius.pact.provider</groupId>
+                <artifactId>maven</artifactId>
+                <version>4.2.2</version>
+                <configuration>
+                    <pactBrokerUrl>http://localhost:9292</pactBrokerUrl>
+                    <pactBrokerUsername>pact_workshop</pactBrokerUsername>
+                    <pactBrokerPassword>pact_workshop</pactBrokerPassword>
                 </configuration>
             </plugin>
         </plugins>

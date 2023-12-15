@@ -1,5 +1,6 @@
 package dk.pejomi.consumerservice.integration;
 
+import dk.pejomi.orderservice.event.OrderEvent;
 import dk.pejomi.consumerservice.ConsumerServiceApplication;
 import dk.pejomi.orderservice.OrderServiceApplication;
 import org.junit.jupiter.api.Disabled;
@@ -30,7 +31,6 @@ public class KafkaIntegrationIT {
     @Test
     public void should_receive_message_when_send_message() throws Exception {
 
-       /*
         // arrange
         String message = "Hello World";
         OrderEvent orderEvent = new OrderEvent();
@@ -42,10 +42,6 @@ public class KafkaIntegrationIT {
         // assert
         boolean messageConsumed = consumer.getLatch().await(10, TimeUnit.SECONDS);
         assertTrue(messageConsumed);
-
-
-        */
-        assert true;
     }
 
 }
