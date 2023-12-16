@@ -1,6 +1,7 @@
 package dk.pejomi.restaurantservice.service.impl;
 
 import dk.pejomi.basedomain.dto.RestaurantDto;
+import dk.pejomi.restaurantservice.kafka.ApprovalProducer;
 import dk.pejomi.restaurantservice.model.Restaurant;
 import dk.pejomi.restaurantservice.repository.RestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -21,13 +21,15 @@ import static org.mockito.Mockito.when;
 class RestaurantServiceImplTest {
 
     @Mock
+    private ApprovalProducer approvalProducer;
+
+    @Mock
     private RestaurantRepository restaurantRepository;
 
     @InjectMocks
     private RestaurantServiceImpl restaurantService;
 
     private Restaurant restaurant;
-    private Restaurant restaurant2;
     private List<Restaurant> restaurants;
 
     private RestaurantDto restaurantDTO;
@@ -52,7 +54,7 @@ class RestaurantServiceImplTest {
                 .zipCode("1234")
                 .build();
 
-        restaurant2 = Restaurant.builder()
+        Restaurant restaurant2 = Restaurant.builder()
                 .id(2L)
                 .phone("12345678")
                 .city("Copenhagen")
@@ -67,7 +69,9 @@ class RestaurantServiceImplTest {
     @Test
     void should_return_restaurant_when_creating_restaurant() {
         //Arrange
+        restaurant.setRestaurantState("PENDING");
         when(restaurantRepository.save(any(Restaurant.class))).thenReturn(restaurant);
+        when(approvalProducer.sendMessage(any(String.class))).thenReturn("Message sent");
 
         //Act
         RestaurantDto actual = restaurantService.createRestaurant(restaurantDTO);
