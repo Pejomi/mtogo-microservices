@@ -7,6 +7,7 @@ import dk.pejomi.restaurantservice.model.Restaurant;
 import dk.pejomi.restaurantservice.repository.RestaurantRepository;
 import dk.pejomi.restaurantservice.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
@@ -53,4 +55,29 @@ public class RestaurantServiceImpl implements RestaurantService {
         return RestaurantMapper.INSTANCE.toRestaurantDTOs(restaurants);
     }
 
+    @Override
+    public List<RestaurantDto> getActiveRestaurantsByZipCode(String zipCode) {
+        List<Restaurant> restaurants = restaurantRepository.findAllByRestaurantStateAndZipCode("ACTIVE", zipCode);
+        return RestaurantMapper.INSTANCE.toRestaurantDTOs(restaurants);
+    }
+
+    @Override
+    public List<RestaurantDto> getActiveRestaurantsByCity(String city) {
+        List<Restaurant> restaurants = restaurantRepository.findAllByRestaurantStateAndCity("ACTIVE", city);
+        return RestaurantMapper.INSTANCE.toRestaurantDTOs(restaurants);
+    }
+
+    @Override
+    public List<RestaurantDto> getPendingRestaurants() {
+        List<Restaurant> restaurants = restaurantRepository.findAllByRestaurantState("PENDING");
+        return RestaurantMapper.INSTANCE.toRestaurantDTOs(restaurants);
+    }
+
+    @Override
+    public RestaurantDto approveRestaurant(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new RuntimeException("Restaurant not found"));
+        restaurant.setRestaurantState("ACTIVE");
+        restaurantRepository.save(restaurant);
+        return RestaurantMapper.INSTANCE.toRestaurantDTO(restaurant);
+    }
 }

@@ -37,4 +37,21 @@ public interface RestaurantApi {
             @ApiResponse(responseCode = "200", description = "Fetch successful")
     })
     public ResponseEntity<List<RestaurantDto>> getRestaurantsByCity(@PathVariable String city);
+
+
+    @Operation(
+            summary = "Fetch all active restaurants by zip code",
+            description = "fetches all active restaurant entities and their data from data source. Use pagination to limit the result set")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Fetch successful")
+    })
+    public ResponseEntity<List<RestaurantDto>> getActiveRestaurantsByZipCode(@PathVariable String zipCode);
+
+    @Operation(
+            summary = "Fetch all active restaurants by city",
+            description = "fetches all active restaurant entities and their data from data source. Use pagination to limit the result set")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Fetch successful")
+    })
+    public ResponseEntity<List<RestaurantDto>> getActiveRestaurantsByCity(@PathVariable String city);
 }

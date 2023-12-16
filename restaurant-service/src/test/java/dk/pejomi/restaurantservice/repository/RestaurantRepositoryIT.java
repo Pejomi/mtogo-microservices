@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,33 +22,10 @@ class RestaurantRepositoryIT {
     private RestaurantRepository restaurantRepository;
 
 
-    private Restaurant restaurant;
-
-    @BeforeEach
-    void beforeEach() {
-        restaurant = Restaurant.builder()
-                .name("Restaurant")
-                .street("Street 1")
-                .city("Copenhagen")
-                .zipCode("1234")
-                .phone("12345678")
-                .country("Denmark")
-                .homepage("www.restaurant.com")
-                .restaurantState("PENDING")
-                .build();
-
-
-    }
-
-    @AfterEach
-    void tearDown() {
-        restaurantRepository.deleteAll();
-    }
-
     @Test
     void should_find_restaurant_by_id() {
         // Arrange
-        restaurantRepository.save(restaurant);
+        Restaurant restaurant = restaurantRepository.findAll().get(0);
 
         // Act
         Restaurant foundRestaurant = restaurantRepository.findById(restaurant.getId()).orElse(null);
@@ -59,7 +38,7 @@ class RestaurantRepositoryIT {
     @Test
     void should_find_restaurant_by_zip_code() {
         // Arrange
-        restaurantRepository.save(restaurant);
+        Restaurant restaurant = restaurantRepository.findAll().get(0);
 
         // Act
         Restaurant foundRestaurant = restaurantRepository.findAllByZipCode(restaurant.getZipCode()).get(0);
@@ -72,7 +51,7 @@ class RestaurantRepositoryIT {
     @Test
     void should_find_restaurant_by_city() {
         // Arrange
-        restaurantRepository.save(restaurant);
+        Restaurant restaurant = restaurantRepository.findAll().get(0);
 
         // Act
         Restaurant foundRestaurant = restaurantRepository.findAllByCity(restaurant.getCity()).get(0);
@@ -82,5 +61,54 @@ class RestaurantRepositoryIT {
         assertEquals(foundRestaurant.getName(), restaurant.getName());
     }
 
+    @Test
+    void should_find_restaurant_by_restaurant_state_and_zip_code() {
+        // Arrange
+        Restaurant restaurant = restaurantRepository.findAll().get(0);
+
+        // Act
+        Restaurant foundRestaurant = restaurantRepository.findAllByRestaurantStateAndZipCode(restaurant.getRestaurantState(), restaurant.getZipCode()).get(0);
+
+        // Assert
+        assertNotNull(foundRestaurant);
+        assertEquals(foundRestaurant.getName(), restaurant.getName());
+    }
+
+    @Test
+    void should_find_restaurant_by_restaurant_state_and_city() {
+        // Arrange
+        Restaurant restaurant = restaurantRepository.findAll().get(0);
+
+        // Act
+        Restaurant foundRestaurant = restaurantRepository.findAllByRestaurantStateAndCity(restaurant.getRestaurantState(), restaurant.getCity()).get(0);
+
+        // Assert
+        assertNotNull(foundRestaurant);
+        assertEquals(foundRestaurant.getName(), restaurant.getName());
+    }
+
+    @Test
+    void should_find_restaurant_by_restaurant_state() {
+        // Act
+        Restaurant foundRestaurant = restaurantRepository.findAllByRestaurantState("PENDING").get(0);
+
+        // Assert
+        assertNotNull(foundRestaurant);
+    }
+
+
+    @Test
+    @Transactional
+    void should_approve_restaurant() throws InterruptedException {
+        // Arrange
+        Restaurant restaurant = restaurantRepository.findAllByRestaurantState("PENDING").get(0);
+        restaurant.setRestaurantState("APPROVED");
+
+        // Act
+        Restaurant approvedRestaurant = restaurantRepository.save(restaurant);
+
+        // Assert
+        assertEquals(approvedRestaurant.getRestaurantState(), "APPROVED");
+    }
 
 }

@@ -26,7 +26,7 @@ class RestaurantControllerIT {
 
 
     @Test
-    void getRestaurantById() throws Exception {
+    void should_return_restaurant_when_getRestaurantById() throws Exception {
         mockMvc
                 .perform(MockMvcRequestBuilders.get("/api/restaurant/1"))
                 .andDo(MockMvcResultHandlers.print())
@@ -34,14 +34,48 @@ class RestaurantControllerIT {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1));
     }
 
+    @Test
+    void should_catch_exception_when_getRestaurantById() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.get("/api/restaurant/100"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 
 
     @Test
-    void getRestaurantByZipCode() throws Exception {
+    void should_return_restaurant_when_getRestaurantsByZipCode() throws Exception {
         mockMvc
                 .perform(MockMvcRequestBuilders.get("/api/restaurant/zip/2500"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].zipCode").value("2500"));
+    }
+
+    @Test
+    void should_return_restaurant_when_getRestaurantsByCity() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.get("/api/restaurant/city/Lyngby"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].city").value("Lyngby"));
+    }
+
+    @Test
+    void should_return_restaurant_when_getActiveRestaurantsByZipCode() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.get("/api/restaurant/active/zip/2500"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].zipCode").value("2500"));
+    }
+
+    @Test
+    void should_return_restaurant_when_getActiveRestaurantsByCity() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.get("/api/restaurant/active/city/Lyngby"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].city").value("Lyngby"));
     }
 }

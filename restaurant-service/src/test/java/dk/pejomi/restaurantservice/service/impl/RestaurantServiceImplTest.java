@@ -158,4 +158,91 @@ class RestaurantServiceImplTest {
         //Assert
         assertEquals(actual.size(), 0);
     }
+
+    // getActiveRestaurantsByZipCode
+    @Test
+    void should_return_restaurant_when_getting_active_restaurant_by_zip_code() {
+        //Arrange
+        when(restaurantRepository.findAllByRestaurantStateAndZipCode(any(String.class), any(String.class))).thenReturn(restaurants);
+        //Act
+        List<RestaurantDto> actual = restaurantService.getActiveRestaurantsByZipCode("1234");
+
+        //Assert
+        assertEquals(2, actual.size());
+    }
+
+    @Test
+    void should_throw_exception_when_getting_active_restaurant_by_zip_code() {
+        //Arrange
+        when(restaurantRepository.findAllByRestaurantStateAndZipCode(any(String.class), any(String.class))).thenReturn(List.of());
+
+        //Act
+        List<RestaurantDto> actual = restaurantService.getActiveRestaurantsByZipCode("1234");
+
+        //Assert
+        assertEquals(actual.size(), 0);
+    }
+
+    // getActiveRestaurantsByCity
+    @Test
+    void should_return_restaurant_when_getting_active_restaurant_by_city() {
+        //Arrange
+        when(restaurantRepository.findAllByRestaurantStateAndCity(any(String.class), any(String.class))).thenReturn(restaurants);
+        //Act
+        List<RestaurantDto> actual = restaurantService.getActiveRestaurantsByCity("Copenhagen");
+
+        //Assert
+        assertEquals(2, actual.size());
+    }
+
+    @Test
+    void should_throw_exception_when_getting_active_restaurant_by_city() {
+        //Arrange
+        when(restaurantRepository.findAllByRestaurantStateAndCity(any(String.class), any(String.class))).thenReturn(List.of());
+
+        //Act
+        List<RestaurantDto> actual = restaurantService.getActiveRestaurantsByCity("Copenhagen");
+
+        //Assert
+        assertEquals(actual.size(), 0);
+    }
+
+    @Test
+    void should_return_list_of_pending_restaurant() {
+        //Arrange
+        when(restaurantRepository.findAllByRestaurantState(any(String.class))).thenReturn(restaurants);
+
+        //Act
+        List<RestaurantDto> actual = restaurantService.getPendingRestaurants();
+
+        //Assert
+        assertEquals(2, actual.size());    }
+
+    @Test
+    void should_return_restaurant_when_approving_restaurant() {
+        //Arrange
+        restaurantDTO.setRestaurantState("ACTIVE");
+        when(restaurantRepository.findById(any(Long.class))).thenReturn(java.util.Optional.ofNullable(restaurant));
+        when(restaurantRepository.save(any(Restaurant.class))).thenReturn(restaurant);
+
+        //Act
+        RestaurantDto actual = restaurantService.approveRestaurant(1L);
+
+        //Assert
+        assertEquals(restaurantDTO.toString(), actual.toString());
+    }
+
+    @Test
+    void should_throw_exception_when_approving_restaurant() {
+        //Arrange
+        when(restaurantRepository.findById(any(Long.class))).thenReturn(java.util.Optional.empty());
+
+        //Act
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            restaurantService.approveRestaurant(1L);
+        });
+
+        //Assert
+        assertEquals("Restaurant not found", exception.getMessage());
+    }
 }
