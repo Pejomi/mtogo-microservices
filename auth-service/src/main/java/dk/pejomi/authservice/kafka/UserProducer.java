@@ -24,10 +24,15 @@ public class UserProducer {
     @Value("${spring.kafka.restaurant_topic.name}")
     private String restaurantTopicName;
 
-    private final KafkaTemplate<String, CreateConsumerEvent> kafkaTemplate;
+    private final KafkaTemplate<String, CreateConsumerEvent> consumerKafkaTemplate;
+    private final KafkaTemplate<String, CreateRestaurantEvent> restaurantKafkaTemplate;
 
-    public UserProducer(KafkaTemplate<String, CreateConsumerEvent> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
+    public UserProducer(
+            KafkaTemplate<String, CreateConsumerEvent> consumerKafkaTemplate,
+            KafkaTemplate<String, CreateRestaurantEvent> restaurantKafkaTemplate)
+    {
+        this.consumerKafkaTemplate = consumerKafkaTemplate;
+        this.restaurantKafkaTemplate = restaurantKafkaTemplate;
     }
 
     public CreateConsumerEvent sendCreateConsumer(CreateConsumerEvent event){
@@ -38,7 +43,7 @@ public class UserProducer {
                 .withPayload(event)
                 .setHeader(KafkaHeaders.TOPIC, consumerTopicName)
                 .build();
-        kafkaTemplate.send(message);
+        consumerKafkaTemplate.send(message);
 
         return event;
     }
@@ -51,7 +56,7 @@ public class UserProducer {
                 .withPayload(event)
                 .setHeader(KafkaHeaders.TOPIC, restaurantTopicName)
                 .build();
-        kafkaTemplate.send(message);
+        restaurantKafkaTemplate.send(message);
 
         return event;
     }
