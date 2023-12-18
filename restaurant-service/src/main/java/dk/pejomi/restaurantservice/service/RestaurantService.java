@@ -16,6 +16,7 @@ public interface RestaurantService {
     List<RestaurantDto> getActiveRestaurantsByCity(String city);
     List<RestaurantDto> getPendingRestaurants();
     RestaurantDto approveRestaurant(Long restaurantId);
+    RestaurantDto rejectRestaurant(Long restaurantId, String reason);
 
 
 

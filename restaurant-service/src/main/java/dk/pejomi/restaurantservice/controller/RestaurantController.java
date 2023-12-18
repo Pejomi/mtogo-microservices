@@ -72,10 +72,27 @@ public class RestaurantController implements RestaurantApi {
         return ResponseEntity.ok(restaurantService.getActiveRestaurantsByCity(city));
     }
 
+    @Override
+    @GetMapping("/pending")
+    public ResponseEntity<List<RestaurantDto>> getPendingRestaurants() {
+        return ResponseEntity.ok(restaurantService.getPendingRestaurants());
+    }
+
     @PutMapping("/approve/{restaurantId}")
     public ResponseEntity<RestaurantDto> approveRestaurant(@PathVariable Long restaurantId) {
         try {
             return ResponseEntity.ok(restaurantService.approveRestaurant(restaurantId));
+        } catch (RuntimeException e) {
+            log.error("Restaurant not found with id [{}]", restaurantId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @Override
+    @PutMapping("/reject/{restaurantId}")
+    public ResponseEntity<RestaurantDto> rejectRestaurant(@PathVariable Long restaurantId, @RequestParam String reason) {
+        try {
+            return ResponseEntity.ok(restaurantService.rejectRestaurant(restaurantId, reason));
         } catch (RuntimeException e) {
             log.error("Restaurant not found with id [{}]", restaurantId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

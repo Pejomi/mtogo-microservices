@@ -66,20 +66,6 @@ class RestaurantServiceImplTest {
         restaurants = List.of(restaurant, restaurant2);
     }
 
-    @Test
-    void should_return_restaurant_when_creating_restaurant() {
-        //Arrange
-        restaurant.setRestaurantState("PENDING");
-        when(restaurantRepository.save(any(Restaurant.class))).thenReturn(restaurant);
-        when(approvalProducer.sendMessage(any(String.class))).thenReturn("Message sent");
-
-        //Act
-        RestaurantDto actual = restaurantService.createRestaurant(restaurantDTO);
-
-        //Assert
-        assertEquals(restaurantDTO.toString(), actual.toString());
-    }
-
     // getRestaurantById
 
     @Test
@@ -207,6 +193,9 @@ class RestaurantServiceImplTest {
         assertEquals(actual.size(), 0);
     }
 
+
+    // TODO: Section for Testing Exam Jonas
+
     @Test
     void should_return_list_of_pending_restaurant() {
         //Arrange
@@ -244,5 +233,62 @@ class RestaurantServiceImplTest {
 
         //Assert
         assertEquals("Restaurant not found", exception.getMessage());
+    }
+
+    @Test
+    void should_return_restaurant_when_rejecting_restaurant() {
+        //Arrange
+        restaurantDTO.setRestaurantState("REJECTED");
+        when(restaurantRepository.findById(any(Long.class))).thenReturn(java.util.Optional.ofNullable(restaurant));
+        when(restaurantRepository.save(any(Restaurant.class))).thenReturn(restaurant);
+
+        //Act
+        RestaurantDto actual = restaurantService.rejectRestaurant(1L, "reason");
+
+        //Assert
+        assertEquals(restaurantDTO.toString(), actual.toString());
+    }
+
+    @Test
+    void should_throw_exception_when_rejecting_restaurant() {
+        //Arrange
+        when(restaurantRepository.findById(any(Long.class))).thenReturn(java.util.Optional.empty());
+
+        //Act
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            restaurantService.rejectRestaurant(1L, "reason");
+        });
+
+        //Assert
+        assertEquals("Restaurant not found", exception.getMessage());
+    }
+
+
+    @Test
+    void should_return_restaurant_when_creating_restaurant() {
+        //Arrange
+        restaurant.setRestaurantState("PENDING");
+        when(restaurantRepository.save(any(Restaurant.class))).thenReturn(restaurant);
+        when(approvalProducer.sendMessage(any(String.class))).thenReturn("Message sent");
+
+        //Act
+        RestaurantDto actual = restaurantService.createRestaurant(restaurantDTO);
+
+        //Assert
+        assertEquals(restaurantDTO.toString(), actual.toString());
+    }
+
+    @Test
+    void should_reject_when_creating_restaurant_with_invalid_country() {
+        //Arrange
+        restaurantDTO.setCountry("Sweden");
+
+        //Act
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            restaurantService.createRestaurant(restaurantDTO);
+        });
+
+        //Assert
+        assertEquals("Invalid country", exception.getMessage());
     }
 }

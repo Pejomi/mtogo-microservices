@@ -13,6 +13,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +25,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public RestaurantDto createRestaurant(RestaurantDto restaurantDTO) {
-
+        if(!Objects.equals(restaurantDTO.getCountry(), "Denmark")) {
+            throw new RuntimeException("Invalid country");
+        }
         // New restaurant have PENDING status
         restaurantDTO.setRestaurantState("PENDING");
 
@@ -77,6 +80,15 @@ public class RestaurantServiceImpl implements RestaurantService {
     public RestaurantDto approveRestaurant(Long restaurantId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new RuntimeException("Restaurant not found"));
         restaurant.setRestaurantState("ACTIVE");
+        restaurantRepository.save(restaurant);
+        return RestaurantMapper.INSTANCE.toRestaurantDTO(restaurant);
+    }
+
+    @Override
+    public RestaurantDto rejectRestaurant(Long restaurantId, String reason) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new RuntimeException("Restaurant not found"));
+        restaurant.setRestaurantState("REJECTED");
+        log.info("Restaurant id " + restaurantId + " rejected: " + reason);
         restaurantRepository.save(restaurant);
         return RestaurantMapper.INSTANCE.toRestaurantDTO(restaurant);
     }

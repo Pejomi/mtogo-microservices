@@ -54,4 +54,30 @@ public interface RestaurantApi {
             @ApiResponse(responseCode = "200", description = "Fetch successful")
     })
     public ResponseEntity<List<RestaurantDto>> getActiveRestaurantsByCity(@PathVariable String city);
+
+    @Operation(
+            summary = "Fetch all pending restaurants",
+            description = "fetches all pending restaurant entities and their data from data source. Use pagination to limit the result set")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Fetch successful")
+    })
+public ResponseEntity<List<RestaurantDto>> getPendingRestaurants();
+
+    @Operation(
+            summary = "Approve a restaurant",
+            description = "Approves a restaurant entity and its data from data source")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Approve successful")
+    })
+    public ResponseEntity<RestaurantDto> approveRestaurant(@PathVariable Long restaurantId);
+
+    @Operation(
+            summary = "Reject a restaurant",
+            description = "Rejects a restaurant entity and its data from data source")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Reject successful")
+    })
+    public ResponseEntity<RestaurantDto> rejectRestaurant(@PathVariable Long restaurantId, @Parameter(description = "Reason for rejection") String reason);
+
+
 }

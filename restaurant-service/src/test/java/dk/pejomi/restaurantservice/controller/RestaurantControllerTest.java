@@ -173,6 +173,20 @@ public class RestaurantControllerTest {
     }
 
     @Test
+    public void should_return_pending_restaurants_when_getPendingRestaurants() {
+        // Arrange
+        List<RestaurantDto> restaurantList = Arrays.asList(new RestaurantDto(), new RestaurantDto());
+        when(restaurantService.getPendingRestaurants()).thenReturn(restaurantList);
+
+        // Act
+        ResponseEntity<List<RestaurantDto>> response = restaurantController.getPendingRestaurants();
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(restaurantList, response.getBody());
+    }
+
+    @Test
     public void should_return_approved_restaurant_when_approveRestaurant() {
         // Arrange
         Long restaurantId = 1L;
@@ -195,6 +209,37 @@ public class RestaurantControllerTest {
 
         // Act
         ResponseEntity<RestaurantDto> response = restaurantController.approveRestaurant(restaurantId);
+
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    @Test
+    public void should_return_rejected_restaurant_when_rejectRestaurant() {
+        // Arrange
+        Long restaurantId = 1L;
+        String reason = "Not good enough";
+        RestaurantDto restaurantDto = new RestaurantDto(); // Create a sample RestaurantDto
+        when(restaurantService.rejectRestaurant(any(Long.class), any(String.class))).thenReturn(restaurantDto);
+
+        // Act
+        ResponseEntity<RestaurantDto> response = restaurantController.rejectRestaurant(restaurantId, reason);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(restaurantDto, response.getBody());
+    }
+
+    @Test
+    public void should_return_not_found_when_rejectRestaurant_throws_exception() {
+        // Arrange
+        Long restaurantId = 1L;
+        String reason = "Not good enough";
+        when(restaurantService.rejectRestaurant(any(Long.class), any(String.class))).thenThrow(new RuntimeException("Not found"));
+
+        // Act
+        ResponseEntity<RestaurantDto> response = restaurantController.rejectRestaurant(restaurantId, reason);
 
         // Assert
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
