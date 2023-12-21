@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +21,7 @@ public class RestaurantController implements RestaurantApi{
 
     @Override
     @GetMapping("/{id}")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<RestaurantDto> getRestaurantById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(restaurantService.getRestaurantById(id));
@@ -35,6 +33,7 @@ public class RestaurantController implements RestaurantApi{
 
     @Override
     @GetMapping("/zip/{zipCode}")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<RestaurantDto>> getRestaurantsByZipCode(@PathVariable String zipCode) {
         return ResponseEntity.ok(restaurantService.getRestaurantsByZipCode(zipCode));
     }

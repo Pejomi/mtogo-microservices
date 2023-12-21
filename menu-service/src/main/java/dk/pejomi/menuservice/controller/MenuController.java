@@ -31,6 +31,7 @@ public class MenuController implements MenuApi {
 
     @Override
     @GetMapping("/restaurant/{id}")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<MenuDto>> getMenuByRestaurantId(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(menuService.getAllMenusByRestaurantId(id));
