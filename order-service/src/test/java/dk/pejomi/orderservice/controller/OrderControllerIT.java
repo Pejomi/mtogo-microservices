@@ -85,4 +85,99 @@ class OrderControllerIT {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
+    @Test
+    void should_return_orderDto_when_getting_order_by_id() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/order/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1));
+    }
+
+    @Test
+    void should_return_order_not_found_when_getting_order_by_id() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/order/1000"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+
+    @Test
+    void should_return_orderDto_when_approving_order() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/order/approve/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.orderState").value("APPROVED"));
+    }
+
+    @Test
+    void should_return_order_not_found_when_approving_order() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/order/approve/1000"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void should_return_orderDto_when_declining_order() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/order/decline/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.orderState").value("DECLINED"));
+    }
+
+    @Test
+    void should_return_order_not_found_when_declining_order() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/order/decline/1000"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void should_return_orderDto_when_getting_all_orders_by_restaurant_id() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/order/restaurant/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].restaurantId").value(1));
+    }
+
+    @Test
+    void should_return_order_not_found_when_getting_all_orders_by_restaurant_id() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/order/restaurant/1000"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void should_return_orderDto_when_getting_all_created_orders_by_restaurant_id() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/order/restaurant/created/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].restaurantId").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].orderState").value("CREATED"));
+    }
+
+    @Test
+    void should_return_order_not_found_when_getting_all_created_orders_by_restaurant_id() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/order/restaurant/created/1000"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void should_return_orderDto_when_getting_all_active_orders_by_restaurant_id() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/order/restaurant/active/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].restaurantId").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].orderState").value("APPROVED"));
+    }
+
+    @Test
+    void should_return_order_not_found_when_getting_all_active_orders_by_restaurant_id() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/order/restaurant/active/1000"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void should_return_orderDto_when_getting_all_declined_orders_by_restaurant_id() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/order/restaurant/declined/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].restaurantId").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].orderState").value("DECLINED"));
+    }
+
+    @Test
+    void should_return_order_not_found_when_getting_all_declined_orders_by_restaurant_id() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/order/restaurant/declined/1000"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
 }

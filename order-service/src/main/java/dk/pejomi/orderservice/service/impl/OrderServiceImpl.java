@@ -49,6 +49,54 @@ public class OrderServiceImpl implements OrderService {
         return OrderMapper.INSTANCE.orderToOrderDto(order);
     }
 
+    @Override
+    public OrderDto getOrderById(Long id) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+        return OrderMapper.INSTANCE.orderToOrderDto(order);
+    }
+
+    @Override
+    public OrderDto approveOrder(Long id) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+        order.setOrderState("APPROVED");
+        return OrderMapper.INSTANCE.orderToOrderDto(order);
+    }
+
+    @Override
+    public OrderDto declineOrder(Long id) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+        order.setOrderState("DECLINED");
+        return OrderMapper.INSTANCE.orderToOrderDto(order);
+    }
+
+    @Override
+    public List<OrderDto> getAllOrdersByRestaurantId(Long id) {
+        List<Order> orders = orderRepository.findAllByRestaurantId(id);
+        if (orders.isEmpty()) throw new RuntimeException("No orders found");
+        return OrderMapper.INSTANCE.ordersToOrderDtos(orders);
+    }
+
+    @Override
+    public List<OrderDto> getAllCreatedOrdersByRestaurantId(Long id) {
+        List<Order> orders = orderRepository.findAllByRestaurantIdAndOrderState(id, "CREATED");
+        if (orders.isEmpty()) throw new RuntimeException("No orders found");
+        return OrderMapper.INSTANCE.ordersToOrderDtos(orders);
+    }
+
+    @Override
+    public List<OrderDto> getAllActiveOrdersByRestaurantId(Long id) {
+        List<Order> orders = orderRepository.findAllByRestaurantIdAndOrderState(id, "APPROVED");
+        if (orders.isEmpty()) throw new RuntimeException("No orders found");
+        return OrderMapper.INSTANCE.ordersToOrderDtos(orders);
+    }
+
+    @Override
+    public List<OrderDto> getAllDeclinedOrdersByRestaurantId(Long id) {
+        List<Order> orders = orderRepository.findAllByRestaurantIdAndOrderState(id, "DECLINED");
+        if (orders.isEmpty()) throw new RuntimeException("No orders found");
+        return OrderMapper.INSTANCE.ordersToOrderDtos(orders);
+    }
+
     private boolean checkTotalPriceMinimum(OrderDto orderDto) {
         return orderDto.getPrice() >= 100;
     }
