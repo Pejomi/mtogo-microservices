@@ -112,5 +112,164 @@ class OrderServiceImplTest {
         assertEquals("Order price is below minimum", exception.getMessage());
     }
 
+    @Test
+    void should_return_orderDto_when_get_by_id() {
+        // Arrange
+        when(orderRepository.findById(Mockito.anyLong()))
+                .thenReturn(java.util.Optional.ofNullable(order));
+        // Act
+        OrderDto actual = orderService.getOrderById(1L);
+        // Assert
+        assertEquals(orderDto, actual);
+    }
 
+    @Test
+    void should_throw_exception_when_order_is_not_found_by_id() {
+        // Arrange
+        when(orderRepository.findById(Mockito.anyLong()))
+                .thenReturn(java.util.Optional.empty());
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class, () -> orderService.getOrderById(1L));
+        // Assert
+        assertEquals("Order not found", exception.getMessage());
+    }
+
+    @Test
+    void should_return_orderDto_when_order_is_approved() {
+        // Arrange
+        when(orderRepository.findById(Mockito.anyLong()))
+                .thenReturn(java.util.Optional.ofNullable(order));
+        // Act
+        OrderDto actual = orderService.approveOrder(1L);
+        // Assert
+        assertEquals("APPROVED", actual.getOrderState());
+    }
+
+    @Test
+    void should_throw_exception_when_order_is_not_found() {
+        // Arrange
+        when(orderRepository.findById(Mockito.anyLong()))
+                .thenReturn(java.util.Optional.empty());
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class, () -> orderService.approveOrder(1L));
+        // Assert
+        assertEquals("Order not found", exception.getMessage());
+    }
+
+    @Test
+    void should_return_orderDto_when_order_is_declined() {
+        // Arrange
+        when(orderRepository.findById(Mockito.anyLong()))
+                .thenReturn(java.util.Optional.ofNullable(order));
+        // Act
+        OrderDto actual = orderService.declineOrder(1L);
+        // Assert
+        assertEquals("DECLINED", actual.getOrderState());
+    }
+
+    @Test
+    void should_throw_exception_when_order_is_not_found_when_declining() {
+        // Arrange
+        when(orderRepository.findById(Mockito.anyLong()))
+                .thenReturn(java.util.Optional.empty());
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class, () -> orderService.declineOrder(1L));
+        // Assert
+        assertEquals("Order not found", exception.getMessage());
+    }
+
+    @Test
+    void should_return_orderDtos_when_get_all_orders_by_restaurant_id() {
+        // Arrange
+        when(orderRepository.findAllByRestaurantId(Mockito.anyLong()))
+                .thenReturn(List.of(order));
+        // Act
+        List<OrderDto> actual = orderService.getAllOrdersByRestaurantId(1L);
+        // Assert
+        assertEquals(List.of(orderDto), actual);
+    }
+
+    @Test
+    void should_throw_exception_when_no_orders_found_by_restaurant_id() {
+        // Arrange
+        when(orderRepository.findAllByRestaurantId(Mockito.anyLong()))
+                .thenReturn(List.of());
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class, () -> orderService.getAllOrdersByRestaurantId(1L));
+        // Assert
+        assertEquals("No orders found", exception.getMessage());
+    }
+
+    @Test
+    void should_return_orderDtos_when_get_all_created_orders_by_restaurant_id() {
+        // Arrange
+        when(orderRepository.findAllByRestaurantIdAndOrderState(Mockito.anyLong(), Mockito.anyString()))
+                .thenReturn(List.of(order));
+        // Act
+        List<OrderDto> actual = orderService.getAllCreatedOrdersByRestaurantId(1L);
+        // Assert
+        assertEquals(List.of(orderDto), actual);
+    }
+
+    @Test
+    void should_throw_exception_when_no_created_orders_found_by_restaurant_id() {
+        // Arrange
+        when(orderRepository.findAllByRestaurantIdAndOrderState(Mockito.anyLong(), Mockito.anyString()))
+                .thenReturn(List.of());
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class, () -> orderService.getAllCreatedOrdersByRestaurantId(1L));
+        // Assert
+        assertEquals("No orders found", exception.getMessage());
+    }
+
+    @Test
+    void should_return_orderDtos_when_get_all_active_orders_by_restaurant_id() {
+        // Arrange
+        when(orderRepository.findAllByRestaurantIdAndOrderState(Mockito.anyLong(), Mockito.anyString()))
+                .thenReturn(List.of(order));
+        // Act
+        List<OrderDto> actual = orderService.getAllActiveOrdersByRestaurantId(1L);
+        // Assert
+        assertEquals(List.of(orderDto), actual);
+    }
+
+    @Test
+    void should_throw_exception_when_no_active_orders_found_by_restaurant_id() {
+        // Arrange
+        when(orderRepository.findAllByRestaurantIdAndOrderState(Mockito.anyLong(), Mockito.anyString()))
+                .thenReturn(List.of());
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class, () -> orderService.getAllActiveOrdersByRestaurantId(1L));
+        // Assert
+        assertEquals("No orders found", exception.getMessage());
+    }
+
+    @Test
+    void should_return_orderDtos_when_get_all_declined_orders_by_restaurant_id() {
+        // Arrange
+        when(orderRepository.findAllByRestaurantIdAndOrderState(Mockito.anyLong(), Mockito.anyString()))
+                .thenReturn(List.of(order));
+        // Act
+        List<OrderDto> actual = orderService.getAllDeclinedOrdersByRestaurantId(1L);
+        // Assert
+        assertEquals(List.of(orderDto), actual);
+    }
+
+    @Test
+    void should_throw_exception_when_no_declined_orders_found_by_restaurant_id() {
+        // Arrange
+        when(orderRepository.findAllByRestaurantIdAndOrderState(Mockito.anyLong(), Mockito.anyString()))
+                .thenReturn(List.of());
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class, () -> orderService.getAllDeclinedOrdersByRestaurantId(1L));
+        // Assert
+        assertEquals("No orders found", exception.getMessage());
+    }
 }
