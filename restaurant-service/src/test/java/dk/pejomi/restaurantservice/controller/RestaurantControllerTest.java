@@ -1,119 +1,248 @@
 package dk.pejomi.restaurantservice.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.pejomi.basedomain.dto.RestaurantDto;
 import dk.pejomi.restaurantservice.service.RestaurantService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-@WebMvcTest(controllers = RestaurantController.class)
-@AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
-class RestaurantControllerTest {
+public class RestaurantControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @InjectMocks
+    private RestaurantController restaurantController;
 
-    @MockBean
+    @Mock
     private RestaurantService restaurantService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Test
+    public void should_return_restaurant_when_getRestaurantById() {
+        // Arrange
+        Long restaurantId = 1L;
+        RestaurantDto restaurantDto = new RestaurantDto(); // Create a sample RestaurantDto
+        when(restaurantService.getRestaurantById(any(Long.class))).thenReturn(restaurantDto);
 
-    private RestaurantDto restaurantDto;
-    private List<RestaurantDto> restaurantDtoList;
+        // Act
+        ResponseEntity<RestaurantDto> response = restaurantController.getRestaurantById(restaurantId);
 
-    @BeforeEach
-    public void init() {
-        restaurantDto = RestaurantDto.builder()
-                .name("Restaurant")
-                .street("Street 1")
-                .city("Copenhagen")
-                .zipCode("1234")
-                .phone("12345678")
-                .country("Denmark")
-                .homepage("www.restaurant.com")
-                .restaurantState("PENDING")
-                .build();
-
-        RestaurantDto restaurantDto2 = RestaurantDto.builder()
-                .name("Restaurant2")
-                .street("Street 2")
-                .city("Copenhagen")
-                .zipCode("1234")
-                .phone("12345678")
-                .country("Denmark")
-                .homepage("www.restaurant2.com")
-                .restaurantState("PENDING")
-                .build();
-
-        restaurantDtoList = List.of(restaurantDto, restaurantDto2);
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(restaurantDto, response.getBody());
     }
 
     @Test
-    void should_return_restaurant_when_getRestaurantById() throws Exception {
+    public void should_return_not_found_when_getRestaurantById_throws_exception() {
         // Arrange
-        when(restaurantService.getRestaurantById(1L)).thenReturn(restaurantDto);
+        Long restaurantId = 1L;
+        when(restaurantService.getRestaurantById(any(Long.class))).thenThrow(new RuntimeException("Not found"));
 
         // Act
-        ResultActions response = mockMvc.perform(get("/api/restaurant/1"));
+        ResponseEntity<RestaurantDto> response = restaurantController.getRestaurantById(restaurantId);
 
         // Assert
-        response.andExpect(status().isOk())
-                .andExpect(result -> assertEquals(restaurantDto, objectMapper.readValue(result.getResponse().getContentAsString(), RestaurantDto.class)));
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
     }
 
     @Test
-    void should_catch_exception_when_getRestaurantById() throws Exception {
+    public void should_return_restaurants_when_getRestaurantsByZipCode() {
         // Arrange
-        when(restaurantService.getRestaurantById(any(Long.class))).thenThrow(new RuntimeException("Restaurant not found"));
+        String zipCode = "2800";
+        List<RestaurantDto> restaurantList = Arrays.asList(new RestaurantDto(), new RestaurantDto());
+        when(restaurantService.getRestaurantsByZipCode(any(String.class))).thenReturn(restaurantList);
 
         // Act
-        ResultActions response = mockMvc.perform(get("/api/restaurant/2"));
+        ResponseEntity<List<RestaurantDto>> response = restaurantController.getRestaurantsByZipCode(zipCode);
 
         // Assert
-        response.andExpect(status().isNotFound());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(restaurantList, response.getBody());
     }
 
     @Test
-    void should_return_restaurant_when_getRestaurantsByZipCode() throws Exception {
+    public void should_return_not_found_when_getRestaurantsByZipCode_throws_exception() {
         // Arrange
-        when(restaurantService.getRestaurantsByZipCode("1234")).thenReturn(restaurantDtoList);
+        String zipCode = "2800";
+        when(restaurantService.getRestaurantsByZipCode(any(String.class))).thenReturn(List.of());
 
         // Act
-        ResultActions response = mockMvc.perform(get("/api/restaurant/zip/1234"));
+        ResponseEntity<List<RestaurantDto>> response = restaurantController.getRestaurantsByZipCode(zipCode);
 
         // Assert
-        response.andExpect(status().isOk())
-                .andExpect(result -> assertEquals(restaurantDtoList.size(), objectMapper.readValue(result.getResponse().getContentAsString(), List.class).size()));
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+
     }
 
     @Test
-    void should_return_restaurant_when_getRestaurantsByCity() throws Exception {
+    public void should_return_restaurants_when_getRestaurantsByCity() {
         // Arrange
-        when(restaurantService.getRestaurantsByCity("Copenhagen")).thenReturn(restaurantDtoList);
+        String city = "Lyngby";
+        List<RestaurantDto> restaurantList = Arrays.asList(new RestaurantDto(), new RestaurantDto());
+        when(restaurantService.getRestaurantsByCity(any(String.class))).thenReturn(restaurantList);
 
         // Act
-        ResultActions response = mockMvc.perform(get("/api/restaurant/city/Copenhagen"));
+        ResponseEntity<List<RestaurantDto>> response = restaurantController.getRestaurantsByCity(city);
 
         // Assert
-        response.andExpect(status().isOk())
-                .andExpect(result -> assertEquals(restaurantDtoList.size(), objectMapper.readValue(result.getResponse().getContentAsString(), List.class).size()));
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(restaurantList, response.getBody());
     }
 
+    @Test
+    public void should_return_not_found_when_getRestaurantsByCity_throws_exception() {
+        // Arrange
+        String city = "Lyngby";
+        when(restaurantService.getRestaurantsByCity(any(String.class))).thenReturn(List.of());
+
+        // Act
+        ResponseEntity<List<RestaurantDto>> response = restaurantController.getRestaurantsByCity(city);
+
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    @Test
+    public void should_return_active_restaurants_when_getActiveRestaurantsByZipCode() {
+        // Arrange
+        String zipCode = "2800";
+        List<RestaurantDto> restaurantList = Arrays.asList(new RestaurantDto(), new RestaurantDto());
+        when(restaurantService.getActiveRestaurantsByZipCode(any(String.class))).thenReturn(restaurantList);
+
+        // Act
+        ResponseEntity<List<RestaurantDto>> response = restaurantController.getActiveRestaurantsByZipCode(zipCode);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(restaurantList, response.getBody());
+    }
+
+    @Test
+    public void should_return_not_found_when_getActiveRestaurantsByZipCode_throws_exception() {
+        // Arrange
+        String zipCode = "2800";
+        when(restaurantService.getActiveRestaurantsByZipCode(any(String.class))).thenReturn(List.of());
+
+        // Act
+        ResponseEntity<List<RestaurantDto>> response = restaurantController.getActiveRestaurantsByZipCode(zipCode);
+
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    @Test
+    public void should_return_active_restaurants_when_getActiveRestaurantsByCity() {
+        // Arrange
+        String city = "Lyngby";
+        List<RestaurantDto> restaurantList = Arrays.asList(new RestaurantDto(), new RestaurantDto());
+        when(restaurantService.getActiveRestaurantsByCity(any(String.class))).thenReturn(restaurantList);
+
+        // Act
+        ResponseEntity<List<RestaurantDto>> response = restaurantController.getActiveRestaurantsByCity(city);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(restaurantList, response.getBody());
+    }
+
+    @Test
+    void should_return_not_found_when_getActiveRestaurantsByCity_throws_exception() {
+        // Arrange
+        String city = "Lyngby";
+        when(restaurantService.getActiveRestaurantsByCity(any(String.class))).thenReturn(List.of());
+
+        // Act
+        ResponseEntity<List<RestaurantDto>> response = restaurantController.getActiveRestaurantsByCity(city);
+
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    @Test
+    public void should_return_pending_restaurants_when_getPendingRestaurants() {
+        // Arrange
+        List<RestaurantDto> restaurantList = Arrays.asList(new RestaurantDto(), new RestaurantDto());
+        when(restaurantService.getPendingRestaurants()).thenReturn(restaurantList);
+
+        // Act
+        ResponseEntity<List<RestaurantDto>> response = restaurantController.getPendingRestaurants();
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(restaurantList, response.getBody());
+    }
+
+    @Test
+    public void should_return_approved_restaurant_when_approveRestaurant() {
+        // Arrange
+        Long restaurantId = 1L;
+        RestaurantDto restaurantDto = new RestaurantDto(); // Create a sample RestaurantDto
+        when(restaurantService.approveRestaurant(any(Long.class))).thenReturn(restaurantDto);
+
+        // Act
+        ResponseEntity<RestaurantDto> response = restaurantController.approveRestaurant(restaurantId);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(restaurantDto, response.getBody());
+    }
+
+    @Test
+    public void should_return_not_found_when_approveRestaurant_throws_exception() {
+        // Arrange
+        Long restaurantId = 1L;
+        when(restaurantService.approveRestaurant(any(Long.class))).thenThrow(new RuntimeException("Not found"));
+
+        // Act
+        ResponseEntity<RestaurantDto> response = restaurantController.approveRestaurant(restaurantId);
+
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    @Test
+    public void should_return_rejected_restaurant_when_rejectRestaurant() {
+        // Arrange
+        Long restaurantId = 1L;
+        String reason = "Not good enough";
+        RestaurantDto restaurantDto = new RestaurantDto(); // Create a sample RestaurantDto
+        when(restaurantService.rejectRestaurant(any(Long.class), any(String.class))).thenReturn(restaurantDto);
+
+        // Act
+        ResponseEntity<RestaurantDto> response = restaurantController.rejectRestaurant(restaurantId, reason);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(restaurantDto, response.getBody());
+    }
+
+    @Test
+    public void should_return_not_found_when_rejectRestaurant_throws_exception() {
+        // Arrange
+        Long restaurantId = 1L;
+        String reason = "Not good enough";
+        when(restaurantService.rejectRestaurant(any(Long.class), any(String.class))).thenThrow(new RuntimeException("Not found"));
+
+        // Act
+        ResponseEntity<RestaurantDto> response = restaurantController.rejectRestaurant(restaurantId, reason);
+
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
 }

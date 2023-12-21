@@ -12,6 +12,11 @@ public interface RestaurantService {
     RestaurantDto getRestaurantById(Long id);
     List<RestaurantDto> getRestaurantsByZipCode(String zipCode);
     List<RestaurantDto> getRestaurantsByCity(String city);
+    List<RestaurantDto> getActiveRestaurantsByZipCode(String zipCode);
+    List<RestaurantDto> getActiveRestaurantsByCity(String city);
+    List<RestaurantDto> getPendingRestaurants();
+    RestaurantDto approveRestaurant(Long restaurantId);
+    RestaurantDto rejectRestaurant(Long restaurantId, String reason);
 
 
 
