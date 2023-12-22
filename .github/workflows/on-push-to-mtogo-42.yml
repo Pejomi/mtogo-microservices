@@ -1,0 +1,35 @@
+name: GKE deployment
+
+on:
+  push:
+    branches:
+      - mtogo-42-containerize-application
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Make mvnw Executable
+        run: chmod +x mvnw
+
+      - name: Build Spring Boot Project
+        run: ./mvnw clean install -DskipTests
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push docker images
+        run: ./mvnw -pl auth-service,consumer-service,menu-service,order-service,restaurant-service jib:build
