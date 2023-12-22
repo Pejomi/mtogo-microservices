@@ -5,6 +5,10 @@ on:
     branches:
       - mtogo-42-containerize-application
 
+env:
+  GKE_CLUSTER: pejomi-test-cluster
+  GKE_ZONE: europe-north1-a
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -33,3 +37,19 @@ jobs:
 
       - name: Build and push docker images
         run: ./mvnw -pl auth-service,consumer-service,menu-service,order-service,restaurant-service jib:build
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: Set up GKE credentials
+        uses: google-github-actions/get-gke-credentials@v0
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+
+      - name: Deploy
+        run: |-
+          kubectl apply -f .k8s-files/ -R
+          kubectl get pods
