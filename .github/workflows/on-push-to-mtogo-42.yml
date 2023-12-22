@@ -50,6 +50,7 @@ jobs:
           location: ${{ env.GKE_ZONE }}
 
       - name: Deploy
-        run:
+        run: |
           kubectl apply -f .k8s-files/ -R
           kubectl get pods
+          
