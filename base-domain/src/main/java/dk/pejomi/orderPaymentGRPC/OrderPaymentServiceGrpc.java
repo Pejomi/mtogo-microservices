@@ -1,4 +1,4 @@
-package dk.pejomi.orderservice.orderPaymentGRPC;
+package dk.pejomi.orderPaymentGRPC;
 
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 import static io.grpc.stub.ClientCalls.asyncBidiStreamingCall;
@@ -24,33 +24,33 @@ public final class OrderPaymentServiceGrpc {
 
   private OrderPaymentServiceGrpc() {}
 
-  public static final String SERVICE_NAME = "dk.pejomi.orderservice.orderPaymentGRPC.OrderPaymentService";
+  public static final String SERVICE_NAME = "dk.pejomi.orderPaymentGRPC.OrderPaymentService";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.OrderDto,
-      dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.PaymentResponse> getProcessPaymentMethod;
+  private static volatile io.grpc.MethodDescriptor<dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto,
+      dk.pejomi.orderPaymentGRPC.OrderPayment.PaymentResponse> getProcessPaymentMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "ProcessPayment",
-      requestType = dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.OrderDto.class,
-      responseType = dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.PaymentResponse.class,
+      requestType = dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto.class,
+      responseType = dk.pejomi.orderPaymentGRPC.OrderPayment.PaymentResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.OrderDto,
-      dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.PaymentResponse> getProcessPaymentMethod() {
-    io.grpc.MethodDescriptor<dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.OrderDto, dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.PaymentResponse> getProcessPaymentMethod;
+  public static io.grpc.MethodDescriptor<dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto,
+      dk.pejomi.orderPaymentGRPC.OrderPayment.PaymentResponse> getProcessPaymentMethod() {
+    io.grpc.MethodDescriptor<dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto, dk.pejomi.orderPaymentGRPC.OrderPayment.PaymentResponse> getProcessPaymentMethod;
     if ((getProcessPaymentMethod = OrderPaymentServiceGrpc.getProcessPaymentMethod) == null) {
       synchronized (OrderPaymentServiceGrpc.class) {
         if ((getProcessPaymentMethod = OrderPaymentServiceGrpc.getProcessPaymentMethod) == null) {
           OrderPaymentServiceGrpc.getProcessPaymentMethod = getProcessPaymentMethod = 
-              io.grpc.MethodDescriptor.<dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.OrderDto, dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.PaymentResponse>newBuilder()
+              io.grpc.MethodDescriptor.<dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto, dk.pejomi.orderPaymentGRPC.OrderPayment.PaymentResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
-                  "dk.pejomi.orderservice.orderPaymentGRPC.OrderPaymentService", "ProcessPayment"))
+                  "dk.pejomi.orderPaymentGRPC.OrderPaymentService", "ProcessPayment"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.OrderDto.getDefaultInstance()))
+                  dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.PaymentResponse.getDefaultInstance()))
+                  dk.pejomi.orderPaymentGRPC.OrderPayment.PaymentResponse.getDefaultInstance()))
                   .setSchemaDescriptor(new OrderPaymentServiceMethodDescriptorSupplier("ProcessPayment"))
                   .build();
           }
@@ -88,8 +88,8 @@ public final class OrderPaymentServiceGrpc {
 
     /**
      */
-    public void processPayment(dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.OrderDto request,
-        io.grpc.stub.StreamObserver<dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.PaymentResponse> responseObserver) {
+    public void processPayment(dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto request,
+        io.grpc.stub.StreamObserver<dk.pejomi.orderPaymentGRPC.OrderPayment.PaymentResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getProcessPaymentMethod(), responseObserver);
     }
 
@@ -99,8 +99,8 @@ public final class OrderPaymentServiceGrpc {
             getProcessPaymentMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.OrderDto,
-                dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.PaymentResponse>(
+                dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto,
+                dk.pejomi.orderPaymentGRPC.OrderPayment.PaymentResponse>(
                   this, METHODID_PROCESS_PAYMENT)))
           .build();
     }
@@ -126,8 +126,8 @@ public final class OrderPaymentServiceGrpc {
 
     /**
      */
-    public void processPayment(dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.OrderDto request,
-        io.grpc.stub.StreamObserver<dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.PaymentResponse> responseObserver) {
+    public void processPayment(dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto request,
+        io.grpc.stub.StreamObserver<dk.pejomi.orderPaymentGRPC.OrderPayment.PaymentResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getProcessPaymentMethod(), getCallOptions()), request, responseObserver);
     }
@@ -153,7 +153,7 @@ public final class OrderPaymentServiceGrpc {
 
     /**
      */
-    public dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.PaymentResponse processPayment(dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.OrderDto request) {
+    public dk.pejomi.orderPaymentGRPC.OrderPayment.PaymentResponse processPayment(dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto request) {
       return blockingUnaryCall(
           getChannel(), getProcessPaymentMethod(), getCallOptions(), request);
     }
@@ -179,8 +179,8 @@ public final class OrderPaymentServiceGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.PaymentResponse> processPayment(
-        dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.OrderDto request) {
+    public com.google.common.util.concurrent.ListenableFuture<dk.pejomi.orderPaymentGRPC.OrderPayment.PaymentResponse> processPayment(
+        dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto request) {
       return futureUnaryCall(
           getChannel().newCall(getProcessPaymentMethod(), getCallOptions()), request);
     }
@@ -206,8 +206,8 @@ public final class OrderPaymentServiceGrpc {
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_PROCESS_PAYMENT:
-          serviceImpl.processPayment((dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.OrderDto) request,
-              (io.grpc.stub.StreamObserver<dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.PaymentResponse>) responseObserver);
+          serviceImpl.processPayment((dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto) request,
+              (io.grpc.stub.StreamObserver<dk.pejomi.orderPaymentGRPC.OrderPayment.PaymentResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -231,7 +231,7 @@ public final class OrderPaymentServiceGrpc {
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment.getDescriptor();
+      return dk.pejomi.orderPaymentGRPC.OrderPayment.getDescriptor();
     }
 
     @java.lang.Override

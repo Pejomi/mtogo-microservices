@@ -1,8 +1,7 @@
 package dk.pejomi.orderservice.service.impl;
 
-import dk.pejomi.orderservice.orderPaymentGRPC.OrderPaymentServiceGrpc;
-import dk.pejomi.orderservice.orderPaymentGRPC.OrderPayment;
-import dk.pejomi.orderservice.orderPaymentGRPC.OrderPaymentServiceGrpc;
+import dk.pejomi.orderPaymentGRPC.OrderPayment;
+import dk.pejomi.orderPaymentGRPC.OrderPaymentServiceGrpc;
 
 public class OrderPaymentImpl extends OrderPaymentServiceGrpc.OrderPaymentServiceImplBase{
     @Override
@@ -14,6 +13,7 @@ public class OrderPaymentImpl extends OrderPaymentServiceGrpc.OrderPaymentServic
         OrderPayment.PaymentResponse response = OrderPayment.PaymentResponse.newBuilder()
                 .setSuccess(true)
                 .setMessage("Payment successful")
+//                .setMessage("Payment successful" + "\nID: " + request.getId() + "\nConsumer ID: " + request.getConsumerId() + "\nRestaurant ID: " + request.getRestaurantId() + "\nOrder State: " + request.getOrderState() + "\nPrice: " + request.getPrice() + "\nOrder Items: \n" + request.getOrderItemsDtoList())
                 .build();
 
         responseObserver.onNext(response);

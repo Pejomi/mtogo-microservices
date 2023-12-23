@@ -25,6 +25,7 @@
         <module>restaurant-service</module>
         <module>jacoco-report</module>
         <module>menu-service</module>
+        <module>payment-grpc-client</module>
     </modules>
 
     <properties>
