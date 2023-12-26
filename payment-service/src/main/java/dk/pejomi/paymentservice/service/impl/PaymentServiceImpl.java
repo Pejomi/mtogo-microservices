@@ -1,6 +1,7 @@
 package dk.pejomi.paymentservice.service.impl;
 
 import dk.pejomi.basedomain.dto.OrderDto;
+import dk.pejomi.basedomain.dto.PaymentResponseDto;
 import dk.pejomi.orderPaymentGRPC.OrderPayment;
 import dk.pejomi.orderPaymentGRPC.OrderPaymentServiceGrpc;
 import dk.pejomi.paymentservice.service.PaymentService;
@@ -15,30 +16,59 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
     @Override
-    public OrderPayment.PaymentResponse sendPaymentRequest(OrderDto orderDto) {
+    public PaymentResponseDto sendPaymentRequest(OrderDto orderDto) {
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8999)
                 .usePlaintext()
                 .build();
 
         OrderPaymentServiceGrpc.OrderPaymentServiceBlockingStub stub
                 = OrderPaymentServiceGrpc.newBlockingStub(channel);
-        OrderPayment.OrderDto protoOrderDto = OrderPayment.OrderDto.newBuilder()
-                .setId(1)
-                .setConsumerId(1)
-                .setRestaurantId(1)
-                .setOrderState("CREATED")
-                .setPrice(100)
-                .addOrderItemsDto(OrderPayment.OrderItemDto.newBuilder()
-                        .setId(1)
-                        .setMenuItemId(1)
-                        .setPrice(100)
-                        .setQuantity(1)
-                        .build())
-                .build();
+
+        OrderPayment.OrderDto protoOrderDto = convertToProtoOrderDto(orderDto);
 
         OrderPayment.PaymentResponse response = stub.processPayment(protoOrderDto);
-        System.out.println(response.getMessage());
+        channel.shutdown();
 
-        return null;
+        return PaymentResponseDto.builder()
+                .message(response.getMessage())
+                .success(response.getSuccess())
+                .orderDto(convertToOrderDto(response.getOrderDto()))
+                .build();
+    }
+
+    private OrderPayment.OrderDto convertToProtoOrderDto(OrderDto orderDto) {
+        return OrderPayment.OrderDto.newBuilder()
+                .setId(orderDto.getId())
+                .setConsumerId(orderDto.getConsumerId())
+                .setRestaurantId(orderDto.getRestaurantId())
+                .setOrderState(orderDto.getOrderState())
+                .setPrice(orderDto.getPrice())
+                .addAllOrderItemsDto(orderDto.getOrderItemsDto().stream()
+                        .map(orderItemDto -> OrderPayment.OrderItemDto.newBuilder()
+                                .setId(orderItemDto.getId())
+                                .setMenuItemId(orderItemDto.getMenuItemId())
+                                .setPrice(orderItemDto.getPrice())
+                                .setQuantity(orderItemDto.getQuantity())
+                                .build())
+                        .toList())
+                .build();
+    }
+
+    public OrderDto convertToOrderDto(OrderPayment.OrderDto protoOrderDto) {
+        return OrderDto.builder()
+                .id(protoOrderDto.getId())
+                .consumerId(protoOrderDto.getConsumerId())
+                .restaurantId(protoOrderDto.getRestaurantId())
+                .orderState(protoOrderDto.getOrderState())
+                .price(protoOrderDto.getPrice())
+                .orderItemsDto(protoOrderDto.getOrderItemsDtoList().stream()
+                        .map(orderItemDto -> dk.pejomi.basedomain.dto.OrderItemDto.builder()
+                                .id(orderItemDto.getId())
+                                .menuItemId(orderItemDto.getMenuItemId())
+                                .price(orderItemDto.getPrice())
+                                .quantity(orderItemDto.getQuantity())
+                                .build())
+                        .toList())
+                .build();
     }
 }

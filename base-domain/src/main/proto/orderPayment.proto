@@ -25,4 +25,5 @@ service OrderPaymentService {
 message PaymentResponse {
   bool success = 1;
   string message = 2;
+  OrderDto orderDto = 3;
 }

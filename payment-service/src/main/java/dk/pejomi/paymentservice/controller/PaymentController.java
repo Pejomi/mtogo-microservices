@@ -1,7 +1,8 @@
 package dk.pejomi.paymentservice.controller;
 
+
 import dk.pejomi.basedomain.dto.OrderDto;
-import dk.pejomi.orderPaymentGRPC.OrderPayment;
+import dk.pejomi.basedomain.dto.PaymentResponseDto;
 import dk.pejomi.paymentservice.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ public class PaymentController implements PaymentApi {
 
     @Override
     @PostMapping
-    public ResponseEntity<OrderPayment.PaymentResponse> sendPaymentRequest(OrderDto orderDto) {
+    public ResponseEntity<PaymentResponseDto> sendPaymentRequest(OrderDto orderDto) {
         try {
             return ResponseEntity.ok(paymentService.sendPaymentRequest(orderDto));
         } catch (RuntimeException e) {

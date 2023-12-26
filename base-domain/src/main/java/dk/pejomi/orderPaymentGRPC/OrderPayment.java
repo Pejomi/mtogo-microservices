@@ -1942,6 +1942,21 @@ public final class OrderPayment {
      */
     com.google.protobuf.ByteString
         getMessageBytes();
+
+    /**
+     * <code>.dk.pejomi.orderPaymentGRPC.OrderDto orderDto = 3;</code>
+     * @return Whether the orderDto field is set.
+     */
+    boolean hasOrderDto();
+    /**
+     * <code>.dk.pejomi.orderPaymentGRPC.OrderDto orderDto = 3;</code>
+     * @return The orderDto.
+     */
+    dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto getOrderDto();
+    /**
+     * <code>.dk.pejomi.orderPaymentGRPC.OrderDto orderDto = 3;</code>
+     */
+    dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDtoOrBuilder getOrderDtoOrBuilder();
   }
   /**
    * Protobuf type {@code dk.pejomi.orderPaymentGRPC.PaymentResponse}
@@ -1998,6 +2013,19 @@ public final class OrderPayment {
               java.lang.String s = input.readStringRequireUtf8();
 
               message_ = s;
+              break;
+            }
+            case 26: {
+              dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto.Builder subBuilder = null;
+              if (orderDto_ != null) {
+                subBuilder = orderDto_.toBuilder();
+              }
+              orderDto_ = input.readMessage(dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(orderDto_);
+                orderDto_ = subBuilder.buildPartial();
+              }
+
               break;
             }
             default: {
@@ -2078,6 +2106,29 @@ public final class OrderPayment {
       }
     }
 
+    public static final int ORDERDTO_FIELD_NUMBER = 3;
+    private dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto orderDto_;
+    /**
+     * <code>.dk.pejomi.orderPaymentGRPC.OrderDto orderDto = 3;</code>
+     * @return Whether the orderDto field is set.
+     */
+    public boolean hasOrderDto() {
+      return orderDto_ != null;
+    }
+    /**
+     * <code>.dk.pejomi.orderPaymentGRPC.OrderDto orderDto = 3;</code>
+     * @return The orderDto.
+     */
+    public dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto getOrderDto() {
+      return orderDto_ == null ? dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto.getDefaultInstance() : orderDto_;
+    }
+    /**
+     * <code>.dk.pejomi.orderPaymentGRPC.OrderDto orderDto = 3;</code>
+     */
+    public dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDtoOrBuilder getOrderDtoOrBuilder() {
+      return getOrderDto();
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -2098,6 +2149,9 @@ public final class OrderPayment {
       if (!getMessageBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, message_);
       }
+      if (orderDto_ != null) {
+        output.writeMessage(3, getOrderDto());
+      }
       unknownFields.writeTo(output);
     }
 
@@ -2113,6 +2167,10 @@ public final class OrderPayment {
       }
       if (!getMessageBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, message_);
+      }
+      if (orderDto_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, getOrderDto());
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -2133,6 +2191,11 @@ public final class OrderPayment {
           != other.getSuccess()) return false;
       if (!getMessage()
           .equals(other.getMessage())) return false;
+      if (hasOrderDto() != other.hasOrderDto()) return false;
+      if (hasOrderDto()) {
+        if (!getOrderDto()
+            .equals(other.getOrderDto())) return false;
+      }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -2149,6 +2212,10 @@ public final class OrderPayment {
           getSuccess());
       hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
       hash = (53 * hash) + getMessage().hashCode();
+      if (hasOrderDto()) {
+        hash = (37 * hash) + ORDERDTO_FIELD_NUMBER;
+        hash = (53 * hash) + getOrderDto().hashCode();
+      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -2286,6 +2353,12 @@ public final class OrderPayment {
 
         message_ = "";
 
+        if (orderDtoBuilder_ == null) {
+          orderDto_ = null;
+        } else {
+          orderDto_ = null;
+          orderDtoBuilder_ = null;
+        }
         return this;
       }
 
@@ -2314,6 +2387,11 @@ public final class OrderPayment {
         dk.pejomi.orderPaymentGRPC.OrderPayment.PaymentResponse result = new dk.pejomi.orderPaymentGRPC.OrderPayment.PaymentResponse(this);
         result.success_ = success_;
         result.message_ = message_;
+        if (orderDtoBuilder_ == null) {
+          result.orderDto_ = orderDto_;
+        } else {
+          result.orderDto_ = orderDtoBuilder_.build();
+        }
         onBuilt();
         return result;
       }
@@ -2368,6 +2446,9 @@ public final class OrderPayment {
         if (!other.getMessage().isEmpty()) {
           message_ = other.message_;
           onChanged();
+        }
+        if (other.hasOrderDto()) {
+          mergeOrderDto(other.getOrderDto());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -2503,6 +2584,125 @@ public final class OrderPayment {
         onChanged();
         return this;
       }
+
+      private dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto orderDto_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto, dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto.Builder, dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDtoOrBuilder> orderDtoBuilder_;
+      /**
+       * <code>.dk.pejomi.orderPaymentGRPC.OrderDto orderDto = 3;</code>
+       * @return Whether the orderDto field is set.
+       */
+      public boolean hasOrderDto() {
+        return orderDtoBuilder_ != null || orderDto_ != null;
+      }
+      /**
+       * <code>.dk.pejomi.orderPaymentGRPC.OrderDto orderDto = 3;</code>
+       * @return The orderDto.
+       */
+      public dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto getOrderDto() {
+        if (orderDtoBuilder_ == null) {
+          return orderDto_ == null ? dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto.getDefaultInstance() : orderDto_;
+        } else {
+          return orderDtoBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>.dk.pejomi.orderPaymentGRPC.OrderDto orderDto = 3;</code>
+       */
+      public Builder setOrderDto(dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto value) {
+        if (orderDtoBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          orderDto_ = value;
+          onChanged();
+        } else {
+          orderDtoBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.dk.pejomi.orderPaymentGRPC.OrderDto orderDto = 3;</code>
+       */
+      public Builder setOrderDto(
+          dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto.Builder builderForValue) {
+        if (orderDtoBuilder_ == null) {
+          orderDto_ = builderForValue.build();
+          onChanged();
+        } else {
+          orderDtoBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>.dk.pejomi.orderPaymentGRPC.OrderDto orderDto = 3;</code>
+       */
+      public Builder mergeOrderDto(dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto value) {
+        if (orderDtoBuilder_ == null) {
+          if (orderDto_ != null) {
+            orderDto_ =
+              dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto.newBuilder(orderDto_).mergeFrom(value).buildPartial();
+          } else {
+            orderDto_ = value;
+          }
+          onChanged();
+        } else {
+          orderDtoBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.dk.pejomi.orderPaymentGRPC.OrderDto orderDto = 3;</code>
+       */
+      public Builder clearOrderDto() {
+        if (orderDtoBuilder_ == null) {
+          orderDto_ = null;
+          onChanged();
+        } else {
+          orderDto_ = null;
+          orderDtoBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>.dk.pejomi.orderPaymentGRPC.OrderDto orderDto = 3;</code>
+       */
+      public dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto.Builder getOrderDtoBuilder() {
+        
+        onChanged();
+        return getOrderDtoFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.dk.pejomi.orderPaymentGRPC.OrderDto orderDto = 3;</code>
+       */
+      public dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDtoOrBuilder getOrderDtoOrBuilder() {
+        if (orderDtoBuilder_ != null) {
+          return orderDtoBuilder_.getMessageOrBuilder();
+        } else {
+          return orderDto_ == null ?
+              dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto.getDefaultInstance() : orderDto_;
+        }
+      }
+      /**
+       * <code>.dk.pejomi.orderPaymentGRPC.OrderDto orderDto = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto, dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto.Builder, dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDtoOrBuilder> 
+          getOrderDtoFieldBuilder() {
+        if (orderDtoBuilder_ == null) {
+          orderDtoBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto, dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDto.Builder, dk.pejomi.orderPaymentGRPC.OrderPayment.OrderDtoOrBuilder>(
+                  getOrderDto(),
+                  getParentForChildren(),
+                  isClean());
+          orderDto_ = null;
+        }
+        return orderDtoBuilder_;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -2587,12 +2787,13 @@ public final class OrderPayment {
       "nsumerId\030\002 \001(\003\022\024\n\014restaurantId\030\003 \001(\003\022\022\n\n" +
       "orderState\030\004 \001(\t\022\r\n\005price\030\005 \001(\001\022?\n\rorder" +
       "ItemsDto\030\006 \003(\0132(.dk.pejomi.orderPaymentG" +
-      "RPC.OrderItemDto\"3\n\017PaymentResponse\022\017\n\007s" +
-      "uccess\030\001 \001(\010\022\017\n\007message\030\002 \001(\t2z\n\023OrderPa" +
-      "ymentService\022c\n\016ProcessPayment\022$.dk.pejo" +
-      "mi.orderPaymentGRPC.OrderDto\032+.dk.pejomi" +
-      ".orderPaymentGRPC.PaymentResponseb\006proto" +
-      "3"
+      "RPC.OrderItemDto\"k\n\017PaymentResponse\022\017\n\007s" +
+      "uccess\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\0226\n\010orderDt" +
+      "o\030\003 \001(\0132$.dk.pejomi.orderPaymentGRPC.Ord" +
+      "erDto2z\n\023OrderPaymentService\022c\n\016ProcessP" +
+      "ayment\022$.dk.pejomi.orderPaymentGRPC.Orde" +
+      "rDto\032+.dk.pejomi.orderPaymentGRPC.Paymen" +
+      "tResponseb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -2615,7 +2816,7 @@ public final class OrderPayment {
     internal_static_dk_pejomi_orderPaymentGRPC_PaymentResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_dk_pejomi_orderPaymentGRPC_PaymentResponse_descriptor,
-        new java.lang.String[] { "Success", "Message", });
+        new java.lang.String[] { "Success", "Message", "OrderDto", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
