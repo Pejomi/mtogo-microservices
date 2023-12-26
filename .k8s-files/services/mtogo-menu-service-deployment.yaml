@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: menu-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: menu-deployment
+  template:
+    metadata:
+      labels:
+        app: menu-deployment
+    spec:
+      containers:
+        - name: menu
+          image: peternedergaard/menu-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+        - name: mysql
+          image: mysql:latest
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: menu-service
+            - name: MYSQL_USER
+              value: user
+            - name: MYSQL_PASSWORD
+              value: password
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: menu-service
+spec:
+  selector:
+    app: menu-deployment
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
