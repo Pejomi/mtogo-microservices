@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package dk.pejomi.orderPaymentGRPC;
+
+message OrderItemDto {
+  int64 id = 1;
+  int64 menuItemId = 2;
+  double price = 5;
+  int32 quantity = 6;
+}
+
+message OrderDto {
+  int64 id = 1;
+  int64 consumerId = 2;
+  int64 restaurantId = 3;
+  string orderState = 4;
+  double price = 5;
+  repeated OrderItemDto orderItemsDto = 6;
+}
+
+service OrderPaymentService {
+  rpc ProcessPayment (OrderDto) returns (PaymentResponse);
+}
+
+message PaymentResponse {
+  bool success = 1;
+  string message = 2;
+  OrderDto orderDto = 3;
+}

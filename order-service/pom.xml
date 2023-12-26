@@ -76,6 +76,34 @@
             <groupId>dk.pejomi</groupId>
             <artifactId>base-domain</artifactId>
         </dependency>
+        <!-- gRPC dependencies -->
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+            <version>1.59.0</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
+            <version>1.59.0</version> <!-- Use the latest version available -->
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+            <version>1.59.0</version> <!-- Use the latest version available -->
+        </dependency>
+        <dependency>
+            <groupId>com.github.os72</groupId>
+            <artifactId>protoc-jar-maven-plugin</artifactId>
+            <version>3.11.4</version>
+        </dependency>
+        <!-- Protocol Buffers (protobuf) dependencies -->
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.25.1</version> <!-- Use the latest version available -->
+        </dependency>
     </dependencies>
 
     <build>
@@ -96,6 +124,36 @@
                         <image>${docker.username}/${project.artifactId}:latest</image>
                     </to>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.os72</groupId>
+                <artifactId>protoc-jar-maven-plugin</artifactId>
+                <version>3.11.4</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <includeMavenTypes>direct</includeMavenTypes>
+                            <inputDirectories>
+                                <include>src/main/proto</include>
+                            </inputDirectories>
+                            <outputTargets>
+                                <outputTarget>
+                                    <type>java</type>
+                                    <outputDirectory>src/main/java</outputDirectory>
+                                </outputTarget>
+                                <outputTarget>
+                                    <type>grpc-java</type>
+                                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.15.0</pluginArtifact>
+                                    <outputDirectory>src/main/java</outputDirectory>
+                                </outputTarget>
+                            </outputTargets>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
