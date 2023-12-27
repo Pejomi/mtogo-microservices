@@ -27,6 +27,7 @@
         <module>menu-service</module>
         <module>notification-service</module>
         <module>courier-service</module>
+        <module>payment-service</module>
     </modules>
 
     <properties>
