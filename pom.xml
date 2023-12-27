@@ -26,6 +26,7 @@
         <module>jacoco-report</module>
         <module>menu-service</module>
         <module>notification-service</module>
+        <module>courier-service</module>
     </modules>
 
     <properties>
