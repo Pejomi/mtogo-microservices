@@ -10,7 +10,7 @@ CREATE TABLE couriers
     firstname TEXT,
     lastname  TEXT,
     country   TEXT,
-    zipcode   TEXT,
+    zip_code   TEXT,
     phone     TEXT,
     email     TEXT,
     active    BOOLEAN
@@ -19,7 +19,7 @@ CREATE TABLE couriers
 
 
 
-INSERT INTO couriers (vehicle, firstname, lastname, country, zipcode, phone, email, active)
+INSERT INTO couriers (vehicle, firstname, lastname, country, zip_code, phone, email, active)
 VALUES ('Bike', 'Allan', 'Andersen', 'Denmark', '2500', '11223344', 'Allan@Andersen.dk', true),
        ('Car', 'Bent', 'Bentsen', 'Denmark', '2730', '22334455', 'Bent@Bentsen.dk', true),
        ('Bike', 'Carl', 'Carlsen', 'Denmark', '3000', '33445566', 'Carl@Carlsen.dk', true),
