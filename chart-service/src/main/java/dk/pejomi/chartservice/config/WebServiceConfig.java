@@ -26,7 +26,7 @@ public class WebServiceConfig extends WsConfigurerAdapter {
     @Bean(name = "charts")
     public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema countriesSchema) {
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
-        wsdl11Definition.setPortTypeName("LineChartPort");
+        wsdl11Definition.setPortTypeName("ChartPort");
         wsdl11Definition.setLocationUri("/ws");
         wsdl11Definition.setTargetNamespace("http://pejomi.dk/chartservice/xml");
         wsdl11Definition.setSchema(lineChartSchema());

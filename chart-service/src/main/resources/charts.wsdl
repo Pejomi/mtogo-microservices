@@ -58,7 +58,7 @@
                 <xs:sequence>
                     <xs:element name="title" type="xs:string" minOccurs="0"/>
                     <xs:element name="labels" type="xs:string" maxOccurs="unbounded"/>
-                    <xs:element name="datasets" type="tns:doughnutDataSet"/>
+                    <xs:element name="datasets" type="tns:doughnutDataSet" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="barChart">
