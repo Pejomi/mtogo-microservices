@@ -1,0 +1,16 @@
+type Query {
+    restaurant(id: ID!): Restaurant
+}
+
+type Restaurant {
+    id: ID!
+    userId: ID!
+    name: String!
+    street: String!
+    city: String!
+    zipCode: String!
+    phone: String!
+    country: String!
+    homepage: String!
+    restaurantState: String!
+}
