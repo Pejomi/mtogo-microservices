@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restaurant-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restaurant-deployment
+  template:
+    metadata:
+      labels:
+        app: restaurant-deployment
+    spec:
+      containers:
+        - name: restaurant
+          image: peternedergaard/restaurant-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+        - name: mysql
+          image: mysql:latest
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: restaurant-service
+            - name: MYSQL_USER
+              value: user
+            - name: MYSQL_PASSWORD
+              value: password
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: restaurant-service
+spec:
+  selector:
+    app: restaurant-deployment
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
