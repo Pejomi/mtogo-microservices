@@ -1,5 +1,70 @@
 type Query {
-    restaurant(id: ID!): Restaurant
+#   restaurant queries
+    restaurantById(id: ID!): Restaurant
+    restaurantsByZipcode(zipCode: String!): [Restaurant]
+    restaurantsByCity(city: String!): [Restaurant]
+    activeRestaurantsByZipcode(zipCode: String!): [Restaurant]
+    activeRestaurantsByCity(city: String!): [Restaurant]
+    pendingRestaurants: [Restaurant]
+
+#   menu queries
+    menuById(id: ID!): Menu
+    menusByRestaurantId(id: ID!): [Menu]
+
+#   courier queries
+    couriers: [Courier] # TODO: not implemented
+    courierById(id: ID!): Courier
+
+#   order queries
+    orderById(id: ID!): Order
+    ordersByRestaurantId(id: ID!): [Order]
+    createdOrdersByRestaurantId(id: ID!): [Order]
+    activeOrdersByRestaurantId(id: ID!): [Order]
+    declinedOrdersByRestaurantId(id: ID!): [Order]
+}
+
+type Mutation {
+#   restaurant queries
+    approveRestaurantById(restaurantId: ID!): Restaurant # Put request
+    rejectRestaurantById(restaurantId: ID!, reason: String!): Restaurant # Put request
+
+#   courier queries
+    createCourier(courierDto: CourierInput!): Courier # Post request
+}
+
+input MenuInput {
+    restaurantId: ID!
+    menuItemsDto: [MenuItemInput]
+}
+
+input MenuItemInput {
+    name: String!
+    price: Float!
+}
+
+input CourierInput {
+    vehicle: String!
+    firstname: String!
+    lastname: String!
+    country: String!
+    zipCode: String!
+    phone: String!
+    email: String!
+    active: Boolean!
+}
+
+input OrderInput {
+    consumerId: ID!
+    restaurantId: ID!
+    orderState: String!
+    price: Float!
+    orderItemsDto: [OrderItemInput]
+}
+
+input OrderItemInput {
+    menuItemId: ID!
+    price: Float!
+    quantity: Int!
 }
 
 type Restaurant {
@@ -13,4 +78,44 @@ type Restaurant {
     country: String!
     homepage: String!
     restaurantState: String!
+}
+
+type Menu {
+    id: ID
+    restaurantId: ID!
+    menuItemsDto: [MenuItem]
+}
+
+type MenuItem {
+    id: ID!
+    name: String!
+    price: Float!
+}
+
+type Courier {
+    id: ID!
+    vehicle: String!
+    firstname: String!
+    lastname: String!
+    country: String!
+    zipCode: String!
+    phone: String!
+    email: String!
+    active: Boolean!
+}
+
+type Order {
+    id: ID!
+    consumerId: ID!
+    restaurantId: ID!
+    orderState: String!
+    price: Float!
+    orderItemsDto: [OrderItem]
+}
+
+type OrderItem {
+    id: ID!
+    menuItemId: ID!
+    price: Float!
+    quantity: Int!
 }
