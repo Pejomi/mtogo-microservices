@@ -19,6 +19,7 @@
 
     <modules>
         <module>base-domain</module>
+        <module>chart-service</module>
         <module>chart-soap-service</module>
         <module>order-service</module>
         <module>consumer-service</module>

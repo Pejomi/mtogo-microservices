@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://pejomi.dk/chartsoap/xml" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://pejomi.dk/chartsoap/xml" targetNamespace="http://pejomi.dk/chartsoap/xml">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://pejomi.dk/chartsoap/xml">
+    <!--  requests & responses  -->
+    <xs:element name="getLineChartRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="lineChart" type="tns:lineChart"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getLineChartResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="url" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getDoughnutChartRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="doughnutChart" type="tns:doughnutChart"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getDoughnutChartResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="url" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getBarChartRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="barChart" type="tns:barChart"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getBarChartResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="url" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!--  chart models  -->
+    <xs:complexType name="lineChart">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="title" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" name="labels" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" name="datasets" type="tns:lineDataSet"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="doughnutChart">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="title" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" name="labels" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" name="datasets" type="tns:doughnutDataSet"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="barChart">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="title" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" name="labels" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" name="datasets" type="tns:barDataSet"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!--  chart datasets  -->
+    <xs:complexType name="lineDataSet">
+        <xs:sequence>
+            <xs:element name="label" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" name="data" type="xs:string"/>
+            <xs:element default="false" minOccurs="0" name="fill" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="doughnutDataSet">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="data" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="barDataSet">
+        <xs:sequence>
+            <xs:element name="label" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" name="data" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getLineChartResponse">
+    <wsdl:part element="tns:getLineChartResponse" name="getLineChartResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getDoughnutChartResponse">
+    <wsdl:part element="tns:getDoughnutChartResponse" name="getDoughnutChartResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getBarChartResponse">
+    <wsdl:part element="tns:getBarChartResponse" name="getBarChartResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getLineChartRequest">
+    <wsdl:part element="tns:getLineChartRequest" name="getLineChartRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getBarChartRequest">
+    <wsdl:part element="tns:getBarChartRequest" name="getBarChartRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getDoughnutChartRequest">
+    <wsdl:part element="tns:getDoughnutChartRequest" name="getDoughnutChartRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ChartPort">
+    <wsdl:operation name="getLineChart">
+      <wsdl:input message="tns:getLineChartRequest" name="getLineChartRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getLineChartResponse" name="getLineChartResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDoughnutChart">
+      <wsdl:input message="tns:getDoughnutChartRequest" name="getDoughnutChartRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getDoughnutChartResponse" name="getDoughnutChartResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getBarChart">
+      <wsdl:input message="tns:getBarChartRequest" name="getBarChartRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getBarChartResponse" name="getBarChartResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ChartPortSoap11" type="tns:ChartPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getLineChart">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="getLineChartRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getLineChartResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDoughnutChart">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="getDoughnutChartRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDoughnutChartResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getBarChart">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="getBarChartRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getBarChartResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ChartPortService">
+    <wsdl:port binding="tns:ChartPortSoap11" name="ChartPortSoap11">
+      <soap:address location="http://localhost:8089/ws"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
