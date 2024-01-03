@@ -30,3 +30,6 @@ build/
 
 ### VS Code ###
 .vscode/
+/mysql-auth/
+/mysql-consumer/
+/grafana/
