@@ -81,9 +81,15 @@
             <groupId>dk.pejomi</groupId>
             <artifactId>base-domain</artifactId>
         </dependency>
+        <!-- Spring Boot Actuator for monitoring and management -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
