@@ -1,9 +1,46 @@
 ---
 version: '3'
+
 services:
+  ## MySQL Docker Compose Config for auth-service database
+  #mysql-auth:
+  #  container_name: mysql-auth
+  #  image: mysql:latest
+  #  environment:
+  #    MYSQL_DATABASE: auth-service
+  #    MYSQL_USER: user
+  #    MYSQL_PASSWORD: password
+  #    MYSQL_ROOT_PASSWORD: root
+  #  volumes:
+  #    - ./mysql-auth:/var/lib/mysql
+  #  expose:
+  #    - "3306"
+  #  ports:
+  #    - "3306:3306"
+  #  restart: always
+
+  ## MySQL Docker Compose Config for consumer-service database
+  #mysql-consumer:
+  #  container_name: mysql-consumer
+  #  image: mysql:latest
+  #  environment:
+  #    MYSQL_DATABASE: consumer-service
+  #    MYSQL_USER: user
+  #    MYSQL_PASSWORD: password
+  #    MYSQL_ROOT_PASSWORD: root
+  #  volumes:
+  #    - ./mysql-consumer:/var/lib/mysql
+  #  expose:
+  #    - "3306"
+  #  ports:
+  #    - "3307:3306"  # Use a different host port for the second database
+  #  restart: always
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.1
     container_name: zookeeper
+    ports:
+      - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -23,3 +60,79 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+  ## Auth-Service Docker Compose Config
+  #auth-service:
+  #  container_name: auth-service
+  #  image: jonasrex/auth-service:latest
+  #  ports:
+  #    - "8080:8080"
+  #  environment:
+  #    - SPRING_PROFILES_ACTIVE=docker
+  #    - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-auth:3306/auth-service
+  #  depends_on:
+  #    - mysql-auth
+  #    - broker
+
+  ## Consumer-Service Docker Compose Config
+  #consumer-service:
+  #  container_name: consumer-service
+  #  image: jonasrex/consumer-service:latest
+  #  ports:
+  #   - "8081:8080"
+  #  environment:
+  #    - SPRING_PROFILES_ACTIVE=docker
+  #    - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-consumer:3306/consumer-service
+  #  depends_on:
+  #    - mysql-consumer
+  #    - broker
+
+  ## Notification-Service Docker Compose Config
+  notification-service:
+    container_name: notification-service
+    ports:
+      - "8082:8080"
+    image: jonasrex/notification-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  ## Order-Service Docker Compose Config
+  #order-service:
+  #  container_name: order-service
+  #  image: microservices-tutorial/order-service:latest
+  #  environment:
+  #    - SPRING_PROFILES_ACTIVE=docker
+  #    - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/order-service
+  #  depends_on:
+  #    - mysql
+  #    - broker
+
+  ## Prometheus
+  prometheus:
+    image: prom/prometheus:v2.37.1
+    container_name: prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - notification-service
+      #- consumer-service
+      #- auth-service
+
+  grafana:
+    image: grafana/grafana-oss:8.5.2
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    links:
+      - prometheus:prometheus
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=password
+    depends_on:
+      - prometheus

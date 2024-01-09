@@ -1,0 +1,54 @@
+global:
+  scrape_interval:     10s
+  evaluation_interval: 10s
+
+scrape_configs:
+  ## All the services in alphabetical order
+  - job_name: 'auth_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['auth-service:8080']
+        labels:
+          application: 'Auth Service Application'
+  - job_name: 'consumer_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['consumer-service:8080']
+        labels:
+          application: 'Consumer Service Application'
+  - job_name: 'courier_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['courier-service:8080']
+        labels:
+          application: 'Courier Service Application'
+  - job_name: 'menu_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['menu-service:8080']
+        labels:
+          application: 'Menu Service Application'
+  - job_name: 'notification_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'notification-service:8080' ]
+        labels:
+          application: 'Notification Service Application'
+  - job_name: 'order_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'order-service:8080' ]
+        labels:
+          application: 'Order Service Application'
+  - job_name: 'payment_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'payment-service:8080' ]
+        labels:
+          application: 'Payment Service Application'
+  - job_name: 'restaurant_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['restaurant-service:8080']
+        labels:
+          application: 'Restaurant Service Application'
