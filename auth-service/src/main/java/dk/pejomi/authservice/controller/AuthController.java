@@ -68,4 +68,18 @@ public class AuthController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/register/camunda-restaurant")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<String> camundaRegisterRestaurant(@RequestBody RegisterRestaurantDto registerRestaurantDto) {
+        if (!registerService.isEmailAvailable(registerRestaurantDto.getEmail())) {
+            return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            return new ResponseEntity<>(registerService.camundaRegisterRestaurant(registerRestaurantDto), HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            log.error("Exception occurred while registering restaurant [{}]", registerRestaurantDto.getEmail(), e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

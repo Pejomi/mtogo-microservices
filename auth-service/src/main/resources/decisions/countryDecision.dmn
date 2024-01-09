@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_125dq1d" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.15.2" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
+  <decision id="countryDecision" name="Country decision">
+    <decisionTable id="DecisionTable_0peff7o">
+      <input id="Input_1" label="Country">
+        <inputExpression id="InputExpression_1" typeRef="string">
+          <text>country</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="Allowed" typeRef="string" />
+      <rule id="DecisionRule_0hqomfm">
+        <inputEntry id="UnaryTests_122dqaz">
+          <text>"DK"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1q1wwco">
+          <text>"true"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="countryDecision">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
