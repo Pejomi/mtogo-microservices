@@ -28,6 +28,7 @@
         <module>notification-service</module>
         <module>courier-service</module>
         <module>payment-service</module>
+        <module>chat-service</module>
     </modules>
 
     <properties>
