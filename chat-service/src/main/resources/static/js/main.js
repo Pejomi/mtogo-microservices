@@ -10,15 +10,14 @@ const chatArea = document.querySelector('#chat-messages');
 const logout = document.querySelector('#logout');
 
 let stompClient = null;
-let nickname = null;
-let fullname = null;
+let name = null;
 let selectedUserId = null;
 
 function connect(event) {
-    nickname = document.querySelector('#nickname').value.trim();
-    fullname = document.querySelector('#fullname').value.trim();
+    name = document.querySelector('#name').value.trim();
 
-    if (nickname && fullname) {
+
+    if (name) {
         usernamePage.classList.add('hidden');
         chatPage.classList.remove('hidden');
 
@@ -32,22 +31,22 @@ function connect(event) {
 
 
 function onConnected() {
-    stompClient.subscribe(`/user/${nickname}/queue/messages`, onMessageReceived);
+    stompClient.subscribe(`/user/${name}/queue/messages`, onMessageReceived);
     stompClient.subscribe(`/user/public`, onMessageReceived);
 
     // register the connected user
     stompClient.send("/app/user.addUser",
         {},
-        JSON.stringify({nickname: nickname, fullname: fullname, status: 'ONLINE'})
+        JSON.stringify({name: name, status: 'ONLINE'})
     );
-    document.querySelector('#connected-user-fullname').textContent = fullname;
+    document.querySelector('#connected-user-name').textContent = name;
     findAndDisplayConnectedUsers().then();
 }
 
 async function findAndDisplayConnectedUsers() {
     const connectedUsersResponse = await fetch('/users');
     let connectedUsers = await connectedUsersResponse.json();
-    connectedUsers = connectedUsers.filter(user => user.nickname !== nickname);
+    connectedUsers = connectedUsers.filter(user => user.name !== name);
     const connectedUsersList = document.getElementById('connectedUsers');
     connectedUsersList.innerHTML = '';
 
@@ -64,14 +63,14 @@ async function findAndDisplayConnectedUsers() {
 function appendUserElement(user, connectedUsersList) {
     const listItem = document.createElement('li');
     listItem.classList.add('user-item');
-    listItem.id = user.nickname;
+    listItem.id = user.name;
 
     const userImage = document.createElement('img');
     userImage.src = '../img/user_icon.png';
-    userImage.alt = user.fullname;
+    userImage.alt = user.name;
 
     const usernameSpan = document.createElement('span');
-    usernameSpan.textContent = user.fullname;
+    usernameSpan.textContent = user.name;
 
     const receivedMsgs = document.createElement('span');
     receivedMsgs.textContent = '0';
@@ -107,7 +106,7 @@ function userItemClick(event) {
 function displayMessage(senderId, content) {
     const messageContainer = document.createElement('div');
     messageContainer.classList.add('message');
-    if (senderId === nickname) {
+    if (senderId === name) {
         messageContainer.classList.add('sender');
     } else {
         messageContainer.classList.add('receiver');
@@ -119,7 +118,7 @@ function displayMessage(senderId, content) {
 }
 
 async function fetchAndDisplayUserChat() {
-    const userChatResponse = await fetch(`/messages/${nickname}/${selectedUserId}`);
+    const userChatResponse = await fetch(`/messages/${name}/${selectedUserId}`);
     const userChat = await userChatResponse.json();
     chatArea.innerHTML = '';
     userChat.forEach(chat => {
@@ -139,13 +138,13 @@ function sendMessage(event) {
     const messageContent = messageInput.value.trim();
     if (messageContent && stompClient) {
         const chatMessage = {
-            senderId: nickname,
+            senderId: name,
             recipientId: selectedUserId,
             content: messageInput.value.trim(),
             timestamp: new Date()
         };
         stompClient.send("/app/chat", {}, JSON.stringify(chatMessage));
-        displayMessage(nickname, messageInput.value.trim());
+        displayMessage(name, messageInput.value.trim());
         messageInput.value = '';
     }
     chatArea.scrollTop = chatArea.scrollHeight;
@@ -179,7 +178,7 @@ async function onMessageReceived(payload) {
 function onLogout() {
     stompClient.send("/app/user.disconnectUser",
         {},
-        JSON.stringify({nickname: nickname, fullname: fullname, status: 'OFFLINE'})
+        JSON.stringify({name: name, status: 'OFFLINE'})
     );
     window.location.reload();
 }
