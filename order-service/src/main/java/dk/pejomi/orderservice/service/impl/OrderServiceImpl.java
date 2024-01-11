@@ -39,12 +39,14 @@ public class OrderServiceImpl implements OrderService {
 
         // TODO: Start a saga here to handle the order flow: payment, delivery, etc.
 
+        /*
         // Kafka event
         OrderEvent orderEvent = new OrderEvent();
         orderEvent.setStatus("PENDING");
         orderEvent.setMessage("order status is in pending state");
         orderEvent.setOrderDto(orderDto);
         orderProducer.sendMessage(orderEvent);
+        */
 
         return OrderMapper.INSTANCE.orderToOrderDto(order);
     }
@@ -59,14 +61,20 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto approveOrder(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
         order.setOrderState("APPROVED");
-        return OrderMapper.INSTANCE.orderToOrderDto(order);
+
+        Order approvedOrder = orderRepository.save(order);
+
+        return OrderMapper.INSTANCE.orderToOrderDto(approvedOrder);
     }
 
     @Override
     public OrderDto declineOrder(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
         order.setOrderState("DECLINED");
-        return OrderMapper.INSTANCE.orderToOrderDto(order);
+
+        Order declinedOrder = orderRepository.save(order);
+
+        return OrderMapper.INSTANCE.orderToOrderDto(declinedOrder);
     }
 
     @Override

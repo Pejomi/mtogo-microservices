@@ -23,7 +23,7 @@ public interface OrderMapper {
 
     OrderItemDto orderItemToOrderItemDto(OrderItem orderItem);
 
-    @Mapping(target = "order", ignore = true)
+    //@Mapping(target = "order", ignore = true)
     OrderItem orderItemDtoToOrderItem(OrderItemDto orderItemDto);
 
     List<OrderDto> ordersToOrderDtos(List<Order> orders);

@@ -110,6 +110,11 @@
             <artifactId>protobuf-java</artifactId>
             <version>3.25.1</version> <!-- Use the latest version available -->
         </dependency>
+        <!-- Netflix Eureka -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

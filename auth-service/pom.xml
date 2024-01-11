@@ -114,6 +114,11 @@
             <version>4.1.17</version>
             <scope>test</scope>
         </dependency>
+        <!-- Netflix Eureka -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

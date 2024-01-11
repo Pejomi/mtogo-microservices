@@ -29,6 +29,8 @@
         <module>courier-service</module>
         <module>payment-service</module>
         <module>chat-service</module>
+        <module>discovery-server</module>
+        <module>restaurant-api-gateway</module>
     </modules>
 
     <properties>
