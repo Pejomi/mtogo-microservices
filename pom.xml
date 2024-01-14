@@ -32,7 +32,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <docker.username>peternedergaard</docker.username>
+        <docker.username>jonasrex</docker.username>
         <jacoco.code.coverage>0.00</jacoco.code.coverage>
     </properties>
 
