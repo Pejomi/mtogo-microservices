@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: restaurant
-          image: peternedergaard/restaurant-service:latest
+          image: jonasrex/restaurant-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

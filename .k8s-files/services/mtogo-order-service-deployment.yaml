@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: order
-          image: peternedergaard/order-service:latest
+          image: jonasrex/order-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

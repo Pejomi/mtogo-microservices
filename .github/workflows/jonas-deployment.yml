@@ -6,7 +6,7 @@ on:
       - Jonas-Deployment-GKC
 
 env:
-  GKE_CLUSTER: pejomi-test-cluster
+  GKE_CLUSTER: mtogo-microservices
   GKE_ZONE: europe-north1
 
 jobs:

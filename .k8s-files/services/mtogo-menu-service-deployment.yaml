@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: menu
-          image: peternedergaard/menu-service:latest
+          image: jonasrex/menu-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
